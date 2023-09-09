@@ -17,20 +17,11 @@ def check_correct(prompt, _torch, _numpy, eps=1e-5):
     x = _torch.detach().numpy()
     y =_numpy
     
-    #when input is scaler
-    if(_numpy.shape == ()):
-        #check percentage error is less than eps
-        if (x-y) <= abs(eps * x):
-            print("correct!")
-        else:
-            print("wrong")
-    #when input is array
+    #check percentage error is less than eps
+    if np.allclose(x, y, rtol=eps):
+        print("correct!")
     else:
-        #check whether array is equal
-        if np.array_equal(x,y):
-            print("correct!")
-        else:
-            print("wrong")
+        print("wrong")
 
 
 def test_activation_functions(torch_fun, relu_fun):

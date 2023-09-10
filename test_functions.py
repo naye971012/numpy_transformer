@@ -103,9 +103,6 @@ def test_loss_functions(prompt , torch_fun, numpy_fun, is_prob=False):
     check_correct("checking forward...", torch_output, numpy_output)
     check_correct("checking backward...", torch_grad , numpy_grad)
     print("===============================\n")
-    
-    print(torch_grad)
-    print(torch_target)
 
 if __name__=="__main__":
     test_activation_functions("Relu" , torch_fun=Relu_th() , numpy_fun=Relu_np())

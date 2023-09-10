@@ -4,6 +4,9 @@ import torch
 from torch_models.activations.relu import Relu_th
 from numpy_models.activations.relu import Relu_np
 
+from torch_models.activations.sigmoid import Sigmoid_th
+from numpy_models.activations.sigmoid import Sigmoid_np
+
 def check_correct(prompt, _torch, _numpy, eps=1e-5):
     """
     Print True if two array is same
@@ -24,7 +27,9 @@ def check_correct(prompt, _torch, _numpy, eps=1e-5):
         print("wrong")
 
 
-def test_activation_functions(torch_fun, relu_fun):
+def test_activation_functions(prompt , torch_fun, relu_fun):
+    print(f"checking {prompt} function ...")
+    print("===============================")
     
     ### make random np array or tensor
     numpy_input = np.random.randn(100,100).astype(np.float32) #[100 , 100] shape np array
@@ -52,6 +57,8 @@ def test_activation_functions(torch_fun, relu_fun):
     ### check whether implementation is correct
     check_correct("checking forward...", torch_output, numpy_output)
     check_correct("checking backward...", torch_grad , numpy_grad)
+    print("===============================\n")
 
 if __name__=="__main__":
-    test_activation_functions(torch_fun=Relu_th() , relu_fun=Relu_np() )
+    test_activation_functions("Relu" , torch_fun=Relu_th() , relu_fun=Relu_np())
+    test_activation_functions("Sigmoid" , torch_fun=Sigmoid_th() , relu_fun=Sigmoid_np())

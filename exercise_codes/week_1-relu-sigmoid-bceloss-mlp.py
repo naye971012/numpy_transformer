@@ -1,5 +1,13 @@
 import numpy as np
 import torch
+import sys
+import os
+
+############## this block is just for import moudles ######
+current_path = os.path.dirname(os.path.realpath(__file__))
+parent_path = os.path.dirname(current_path)
+sys.path.append(parent_path)
+###########################################################
 
 from torch_models.activations.relu import Relu_th
 from numpy_models.activations.relu import Relu_np

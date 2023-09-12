@@ -4,9 +4,9 @@ import torch.nn as nn
 
 
 class Binary_Cross_Entropy_th(nn.Module):
-    def __init__(self,eps=1e-10) -> None:
+    def __init__(self) -> None:
         super().__init__()
-        self.eps = eps
+        self.bce_loss = torch.nn.BCELoss()
     
     def forward(self, pred, target ):
         """
@@ -20,5 +20,5 @@ class Binary_Cross_Entropy_th(nn.Module):
             Tensor: Scaler 
         """
 
-        output = -1 * torch.mean( pred * torch.log(target + self.eps ) + (1-pred) * torch.log( 1-target + self.eps ))
+        output = self.bce_loss(pred, target)
         return output

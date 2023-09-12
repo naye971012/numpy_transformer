@@ -69,11 +69,11 @@ def test_loss_functions(prompt , torch_fun, numpy_fun, is_prob=False):
     
     ### make random np array or tensor
     if is_prob:
-        numpy_input = np.random.rand(100,100).astype(np.float32) #[100 , 100] shape np array, prob
-        numpy_target = np.random.randint(0,2, size=(100,100)).astype(np.float32) #[100,100] shape with binary value
+        numpy_input = np.random.rand(1,100).astype(np.float32) #[1 , 100] shape np array, prob
+        numpy_target = np.random.randint(0,2, size=(1,100)).astype(np.float32) #[1,100] shape with binary value
     else:
-        numpy_input = np.random.randn(100,100).astype(np.float32) #[100 , 100] shape np array, logit
-        numpy_target = np.random.randn(100,100).astype(np.float32) #[100, 100] shape with mean=0, std=1 value
+        numpy_input = np.random.randn(1,100).astype(np.float32) #[1 , 100] shape np array, logit
+        numpy_target = np.random.randn(1,100).astype(np.float32) #[1, 100] shape with mean=0, std=1 value
 
     torch_input = torch.Tensor(numpy_input).to(torch.float32) #same as numpy input.
     torch_target = torch.Tensor(numpy_target).to(torch.float32) #same as numpy target
@@ -81,14 +81,14 @@ def test_loss_functions(prompt , torch_fun, numpy_fun, is_prob=False):
     torch_input.requires_grad=True #for autograd utils
     
     ### define activation function
-    torch_loss_fun = torch.nn.BCELoss(reduction='sum')#torch_fun
+    torch_loss_fun = torch_fun
     numpy_loss_fun = numpy_fun
     
     ### calculate function
-    torch_output = torch_loss_fun(torch_input, torch_target) 
+    torch_output = torch_loss_fun(torch_input, torch_target)
 
     numpy_output = numpy_loss_fun(numpy_input, numpy_target)
-    print(torch_output , numpy_output)
+    #print(torch_output , numpy_output)
     
     ### backward
     torch_output.backward() #backward to scaler value. use autograd
@@ -97,7 +97,7 @@ def test_loss_functions(prompt , torch_fun, numpy_fun, is_prob=False):
     ### save gradient
     torch_grad = torch_input.grad
     numpy_grad = numpy_loss_fun.grad
-    print(torch_grad, numpy_grad)
+    #print(torch_grad, numpy_grad)
     
     ### check whether implementation is correct
     check_correct("checking forward...", torch_output, numpy_output)

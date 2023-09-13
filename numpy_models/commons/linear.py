@@ -15,4 +15,15 @@ class Linear_np:
         Returns:
             array, [# of batch, ... , out_features]
         """
-        return self.linear(x)
+        return
+    
+    def backward(self):
+        """
+        backward:
+            input <-- linear <-- output
+        
+        """
+        return
+    
+    def __call__(self, pred, target):
+        return self.forward(pred, target)

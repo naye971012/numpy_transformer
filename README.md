@@ -1,7 +1,6 @@
 # numpy_transformer
 numpy implementation of deep learning models including Transformer
 
-'''.
 .
 ├── dummy_codes.py
 ├── exercise_codes
@@ -22,4 +21,3 @@ numpy implementation of deep learning models including Transformer
     │   └── linear.py
     └── losses
         └── binary_ce.py
-'''

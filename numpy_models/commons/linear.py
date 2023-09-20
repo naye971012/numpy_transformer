@@ -40,13 +40,23 @@ class Linear_np:
         - Gradients of W, b
 
         [Inputs]
-            d_prev : Gradients until now.
+            d_prev : Gradients until now. (N,H)
 
         [Outputs]
             dx : Gradients of input x (==self.grad)
         """
+        #### dW
+        # x.T = (N,D) -> (D,N)       
+        # x.T * d_prev = (D,N) * (N,H) = (D,H)
         
-        self.dW = self.x.T.dot(d_prev)
+        #### db
+        # np.sum(d_prev) = (N,H) -> (H)
+        
+        #### grad
+        # W * d_prev = (D,H) * (N,H) -> (D,N)
+        # (D,N).T = (N,D)
+        
+        self.dW = self.x.T.dot(d_prev) 
         self.db = np.sum(d_prev, axis=0)
         self.grad = np.matmul(self.W, d_prev.T).T
         

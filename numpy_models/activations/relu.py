@@ -22,13 +22,13 @@ class Relu_np():
         self.output = x #save output
         return x
     
-    def backward(self):
+    def backward(self, d_prev):
         """
         backward:
             output -> d_relu -> grad
         
         """
-        prev = np.ones_like(self.output)
+        prev = np.ones_like(d_prev)
         prev[self.d_zeros] = 0
         
         self.grad = prev #save grad

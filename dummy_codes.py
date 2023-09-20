@@ -1,10 +1,21 @@
 import torch
 
-# 예제로 사용할 Torch 텐서를 생성합니다.
-tensor = torch.tensor([0.2, 0.5, 1.2, -0.1, 0.8])
+linear = torch.nn.Linear(5,10)
+linear2 = torch.nn.Linear(10,5)
 
-# 0과 1 사이의 값을 가지지 않는 요소를 찾습니다.
-out_of_range_elements = torch.logical_or(tensor < 0, tensor > 1)
+x1 = torch.randn((1,5))
+x1.requires_grad =True
 
-# 결과를 출력합니다.
-print(out_of_range_elements)
+x2 = linear(x1)
+x3 = linear2(x2)
+
+print(x1)
+print(x2)
+print(x3)
+print("===================")
+y = torch.sum(x3)
+y.backward()
+
+print(x1.grad)
+print(x2.grad)
+print(x3.grad)

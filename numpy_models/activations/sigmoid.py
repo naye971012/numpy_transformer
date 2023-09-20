@@ -19,14 +19,14 @@ class Sigmoid_np():
         self.output = out
         return out
     
-    def backward(self):
+    def backward(self, d_prev):
         """
         backward:
             output -> d_sigmoid -> grad
         
         """
     
-        grad = (self.output) * (1 - self.output )
+        grad = (d_prev) * (1 - d_prev )
         
         self.grad = grad
         return self.grad

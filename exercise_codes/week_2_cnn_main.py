@@ -175,10 +175,10 @@ def start(train_linear_th=False, train_linear_np=False, train_cnn_th=False, trai
     
     if(train_linear_np):
         print("========================")
-        print("training linear torch model...")
+        print("training linear numpy model...")
         model = linear_model_np()
         accuracy = train_np(model, train_images, train_labels, test_images, test_labels)
-        print(f"training with linear_th accuracy: {accuracy * 100:.2f}%")
+        print(f"training with linear_np accuracy: {accuracy * 100:.2f}%")
         print("========================")
     
     

@@ -19,7 +19,7 @@ class Sigmoid_np():
         self.output = out
         return out
     
-    def backward(self, d_prev):
+    def backward(self, d_prev=1):
         """
         backward:
             output -> d_sigmoid -> grad

@@ -37,7 +37,7 @@ class Cross_Entropy_np():
         """
 
         #divide grad by [# of class] since we apply np.mean in forward
-        grad = (self.pred - self.target) / ( (self.pred ) * (1 - self.pred ) + self.eps )
+        grad = (self.pred - self.target) / ( (self.pred ) * (1 - self.pred ) + self.eps ) / self.target.shape[-1]
         
         self.grad = grad
         return self.grad

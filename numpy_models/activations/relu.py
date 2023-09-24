@@ -31,7 +31,7 @@ class Relu_np():
         prev = np.ones_like(d_prev)
         prev[self.d_zeros] = 0
         
-        self.grad = prev #save grad
+        self.grad = prev * d_prev #save grad
         return self.grad
     
     def __call__(self,x):

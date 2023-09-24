@@ -25,11 +25,11 @@ def load_data():
     train_random_indices = random.sample(range(len(train_images)), 30000)
     test_random_indices = random.sample(range(len(test_images)), 10000)
 
-    #train_images = train_images[train_random_indices]
-    #train_labels = train_labels[train_random_indices]
+    train_images = train_images[train_random_indices]
+    train_labels = train_labels[train_random_indices]
 
-    #test_images = test_images[test_random_indices]
-    #test_labels = test_labels[test_random_indices]
+    test_images = test_images[test_random_indices]
+    test_labels = test_labels[test_random_indices]
 
     #print datset shape
     print("train image shape:", train_images.shape)
@@ -102,6 +102,63 @@ def validate_th(model, image, label):
     accuracy = total_correct / total_data
     return accuracy
 
+def train_np(model,image,label,test_image,test_label):
+    
+    image = np.array(image, dtype=np.float32)
+    label = np.array(label, dtype=int)
+
+    data_len = image.shape[0]
+    
+    for epoch in range(TOTAL_EPOCH):
+        epoch_loss = 0.0
+        tqdm_batch = tqdm(range(data_len // BATCH_SIZE), desc=f"Epoch {epoch + 1}/{TOTAL_EPOCH}")
+        for i, batch in enumerate(tqdm_batch):
+            start = batch * BATCH_SIZE
+            end = (batch+1) * BATCH_SIZE
+            
+            image_batch = image[start:end]
+            label_batch = label[start:end]
+            
+            output = model.forward(image_batch)
+            loss = model.loss(output,label_batch)
+            
+            epoch_loss+=loss
+            
+            model.backward()
+            model.update_grad(LR,BATCH_SIZE)
+            
+            tqdm_batch.set_postfix(loss=epoch_loss/(i+1))
+        
+        accuracy = validate_np(model, test_image, test_label)
+    return accuracy
+
+def validate_np(model, image, label):
+    image = np.array(image, dtype=np.float32)
+    label = np.array(label, dtype=int)
+
+    data_len = image.shape[0]
+    
+    total_data = 0
+    total_correct = 0
+    tqdm_batch = tqdm(range(data_len // BATCH_SIZE), desc=f"validation")
+    for i, batch in enumerate(tqdm_batch):
+            start = batch * BATCH_SIZE
+            end = (batch+1) * BATCH_SIZE
+            
+            image_batch = image[start:end]
+            label_batch = label[start:end]
+                       
+            output = model.forward(image_batch)
+            
+            predicted_classes = np.argmax(output, axis=1)
+            total_correct += (predicted_classes == label_batch).sum().item()
+            total_data += label_batch.shape[0]
+            
+            tqdm_batch.set_postfix(accuracy=total_correct/total_data)
+            
+    accuracy = total_correct / total_data
+    return accuracy   
+
 def start(train_linear_th=False, train_linear_np=False, train_cnn_th=False, train_cnn_np=False):
     print("loading...")
     train_images, train_labels, test_images, test_labels = load_data()
@@ -114,6 +171,17 @@ def start(train_linear_th=False, train_linear_np=False, train_cnn_th=False, trai
         accuracy = train_th(model, train_images, train_labels, test_images, test_labels, criterion=nn.CrossEntropyLoss())
         print(f"training with linear_th accuracy: {accuracy * 100:.2f}%")
         print("========================")
+    
+    
+    if(train_linear_np):
+        print("========================")
+        print("training linear torch model...")
+        model = linear_model_np()
+        accuracy = train_np(model, train_images, train_labels, test_images, test_labels)
+        print(f"training with linear_th accuracy: {accuracy * 100:.2f}%")
+        print("========================")
+    
+    
     if(train_cnn_th):
         print("========================")
         print("training cnn torch model...")
@@ -127,4 +195,4 @@ if __name__=="__main__":
     TOTAL_EPOCH=5
     BATCH_SIZE=48
     LR=0.001
-    start(train_linear_th=True,train_linear_np=False,train_cnn_th=True,train_cnn_np=False)
+    start(train_linear_th=False,train_linear_np=True,train_cnn_th=False,train_cnn_np=False)

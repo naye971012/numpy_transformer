@@ -26,7 +26,7 @@ class Sigmoid_np():
         
         """
     
-        grad = (self.output) * (1 - self.output )
+        grad = d_prev * (self.output) * (1 - self.output )
         
         self.grad = grad
         return self.grad

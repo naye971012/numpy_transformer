@@ -23,7 +23,7 @@ class Cross_Entropy_np():
         target_one_hot = np.zeros((batch_size, num_class))
         target_one_hot[np.arange(batch_size), target] = 1
         
-        output = -1 * (target_one_hot * np.log( pred + self.eps) )
+        output = -1 * (target_one_hot * np.log( pred + self.eps) ) # sigma y_target * np.log(y_pred)
         
         self.pred = pred
         self.target = target_one_hot

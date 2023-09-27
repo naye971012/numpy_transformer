@@ -200,8 +200,8 @@ def start(train_linear_th=False, train_linear_np=False, train_cnn_th=False, trai
         print("========================")
 
 if __name__=="__main__":
-    random.seed(48)
+    random.seed(71)
     TOTAL_EPOCH=5
     BATCH_SIZE=48
     LR=0.001
-    start(train_linear_th=False,train_linear_np=True,train_cnn_th=False,train_cnn_np=False)
+    start(train_linear_th=True,train_linear_np=True,train_cnn_th=False,train_cnn_np=False)

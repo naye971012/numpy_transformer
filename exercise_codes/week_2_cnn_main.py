@@ -22,7 +22,7 @@ def load_data():
     (train_images, train_labels), (test_images, test_labels) = mnist.load_data()
 
     #since dataset is too big for cpu, reduce size
-    train_random_indices = random.sample(range(len(train_images)), 30000)
+    train_random_indices = random.sample(range(len(train_images)), 60000)
     test_random_indices = random.sample(range(len(test_images)), 10000)
 
     train_images = train_images[train_random_indices]
@@ -200,7 +200,7 @@ def start(train_linear_th=False, train_linear_np=False, train_cnn_th=False, trai
         print("========================")
 
 if __name__=="__main__":
-    random.seed(24)
+    random.seed(48)
     TOTAL_EPOCH=5
     BATCH_SIZE=48
     LR=0.001

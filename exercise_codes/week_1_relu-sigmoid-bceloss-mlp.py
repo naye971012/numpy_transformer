@@ -82,7 +82,7 @@ def test_activation_functions(prompt , torch_fun, numpy_fun):
     numpy_output = np.sum(numpy_output_origin,axis=None)
     
     torch_output.backward() #backward to scaler value. use autograd
-    numpy_activation_fun.backward(numpy_output_origin) #compared to torch, numpy needs to call backward function to function itself
+    numpy_activation_fun.backward(np.ones_like(numpy_output_origin)) #compared to torch, numpy needs to call backward function to function itself
     
     ### save gradient
     torch_grad = torch_input.grad

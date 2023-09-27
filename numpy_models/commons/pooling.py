@@ -35,7 +35,7 @@ class MaxPooling2D:
                 w_end = w_start + self.pool_w
 
                 sub_array = x[: ,:, h_start:h_end , w_start:w_end]
-                self.output[:, :, i, j ] = np.max( sub_array , axis=(2,3) )
+                self.output[:, :, i, j ] = np.max( sub_array , axis=(2,3) ).reshape(n,c,1,1)
                 
                 self.output_index[: ,:, h_start:h_end , w_start:w_end] = self.cal_max_idx(sub_array)
                 

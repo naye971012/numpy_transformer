@@ -25,6 +25,13 @@ from numpy_models.commons.linear import Linear_np
 
 from numpy_models.losses.ce import Cross_Entropy_np
 
+from numpy_models.commons.cnn import Conv2d_np
+
+x = np.random.rand(1,1,5,5)
+conv = Conv2d_np(1,3,(3,3),1,1)
+y = conv(x)
+print(y.shape)
+
 class linear_model_th(nn.Module):
     def __init__(self, input_channel=28*28, output_channel=10) -> None:
         super().__init__()

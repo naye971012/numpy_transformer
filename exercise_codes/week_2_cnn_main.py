@@ -190,6 +190,15 @@ def start(train_linear_th=False, train_linear_np=False, train_cnn_th=False, trai
         print(f"training with cnn_th accuracy: {accuracy * 100:.2f}%")
         print("========================")
 
+
+    if(train_cnn_np):
+        print("========================")
+        print("training cnn numpy model...")
+        model = linear_model_np()
+        accuracy = train_np(model, train_images, train_labels, test_images, test_labels)
+        print(f"training with cnn_np accuracy: {accuracy * 100:.2f}%")
+        print("========================")
+
 if __name__=="__main__":
     random.seed(24)
     TOTAL_EPOCH=5

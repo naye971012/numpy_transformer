@@ -25,7 +25,7 @@ class Binary_Cross_Entropy_np():
         self.target = target
         return np.mean(output, axis=None)
     
-    def backward(self):
+    def backward(self, d_prev=1):
         """
         backward:
             output -> d_sigmoid -> grad

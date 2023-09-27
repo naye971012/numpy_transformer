@@ -145,7 +145,7 @@ class cnn_model_th(nn.Module):
         
         return x
 
-class linear_model_np():
+class cnn_model_np():
     def __init__(self, input_channel=28*28, output_channel=10) -> None:
         pass
         

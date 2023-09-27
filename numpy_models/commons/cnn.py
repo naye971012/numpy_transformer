@@ -195,7 +195,6 @@ class Conv2d_np:
         return self.forward(x)
 
 
-
 if __name__ == "__main__":
     layer = Conv2d_np(1,3,(3,3))
     

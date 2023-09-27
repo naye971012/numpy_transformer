@@ -11,7 +11,7 @@ class Conv2d_np:
         in_c: int, 
         out_c: int, 
         kernel_shape: tuple = (3,3),
-        padding: str = 'valid',
+        padding: str = 'same', #valid or same
         stride: int = 1
     ):
         """

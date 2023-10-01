@@ -1,7 +1,7 @@
 from typing import Any
 import numpy as np
 
-class MaxPooling2D:
+class MaxPooling2D_np:
 
     def __init__(self, pooling_shape: tuple=(2,2) , stride: int=None) -> None:
         self.pool_w, self.pool_h = pooling_shape
@@ -88,7 +88,7 @@ class MaxPooling2D:
 
 
 if __name__== "__main__":
-    model = MaxPooling2D()
+    model = MaxPooling2D_np()
     x = np.random.randint(1,10,size=(1,1,4,4))
     print(x)
     print("==============")

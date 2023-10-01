@@ -1,25 +1,35 @@
 # numpy_transformer
 numpy implementation of deep learning models including Transformer
 
-```
-.
-├── dummy_codes.py
-├── exercise_codes
-│   └── week_1-relu-sigmoid-bceloss-mlp.py
-├── numpy_models
-│   ├── activations
-│   │   ├── relu.py
-│   │   └── sigmoid.py
-│   ├── commons
-│   │   └── linear.py
-│   └── losses
-│       └── binary_ce.py
-└── torch_models
-    ├── activations
-    │   ├── relu.py
-    │   └── sigmoid.py
-    ├── commons
-    │   └── linear.py
-    └── losses
-        └── binary_ce.py
-```
+
+# Completed Checklist
+
+Here is the current checklist of completed items:
+
+## Activation Functions
+- ReLU (Rectified Linear Unit)
+- Sigmoid
+
+## Loss Functions
+- Cross-Entropy Loss
+- Binary Cross-Entropy Loss
+
+## Layers
+- Linear Layer
+- CNN (Convolutional Neural Network)
+
+## Utilities
+- MaxPooling
+
+
+
+# TODO LIST
+
+## Optimizers
+- SGD
+- Adam
+
+## Utilities
+- Dropout
+- Embedding
+- Positional Embedding

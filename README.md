@@ -21,15 +21,23 @@ Here is the current checklist of completed items:
 ## Utilities
 - MaxPooling
 
-
-
-# TODO LIST
-
 ## Optimizers
 - SGD
+- SGD with momentum
 - Adam
 
 ## Utilities
 - Dropout
 - Embedding
+
+
+
+# TODO LIST
+
+## Layers
+- Attention
+- RNN
+- GRU
+
+## Utilities
 - Positional Embedding

@@ -97,7 +97,7 @@ def validate_np(model, image, label):
     accuracy = total_correct / total_data
     return accuracy   
 
-def start(train_SGD_np=False, train_SGD_momentum_np=False):
+def start(train_SGD_np=False, train_SGD_momentum_np=False, train_Adam_np=False):
     print("loading...")
     train_images, train_labels, test_images, test_labels = load_data()
     print("========================\n\n")
@@ -108,7 +108,7 @@ def start(train_SGD_np=False, train_SGD_momentum_np=False):
         print("training numpy model with SGD...")
         model = model_SGD_np()
         accuracy = train_np(model, train_images, train_labels, test_images, test_labels)
-        print(f"training with SGD accuracy: {accuracy * 100:.2f}%")
+        print(f"training with SGD accuracy: {accuracy * 100:.2f}%") # 44%
         print("========================")
 
 
@@ -117,12 +117,21 @@ def start(train_SGD_np=False, train_SGD_momentum_np=False):
         print("training numpy model with momentum...")
         model = model_SGD_momentum_np()
         accuracy = train_np(model, train_images, train_labels, test_images, test_labels)
-        print(f"training with momentum accuracy: {accuracy * 100:.2f}%")
+        print(f"training with momentum accuracy: {accuracy * 100:.2f}%") # 24%
+        print("========================")
+      
+        
+    if(train_Adam_np):
+        print("========================")
+        print("training numpy model with momentum...")
+        model = model_Adam_np()
+        accuracy = train_np(model, train_images, train_labels, test_images, test_labels)
+        print(f"training with momentum accuracy: {accuracy * 100:.2f}%") # 33%
         print("========================")
 
 if __name__=="__main__":
     random.seed(71)
-    TOTAL_EPOCH=5
+    TOTAL_EPOCH=10
     BATCH_SIZE=48
     LR=0.0001
-    start(train_SGD_np=True, train_SGD_momentum_np=True)
+    start(train_SGD_np=True, train_SGD_momentum_np=True, train_Adam_np=True)

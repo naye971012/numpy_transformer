@@ -3,6 +3,8 @@ numpy implementation of deep learning models including Transformer
 
 
 '''
+
+.
 ├── dummy_codes.py
 ├── README.md
 ├── exercise_codes
@@ -28,7 +30,8 @@ numpy implementation of deep learning models including Transformer
 │   └── utils
 │       ├── dropout.py
 │       ├── embedding.py
-│       └── pooling.py
+│       ├── pooling.py
+│       └── positional_encoding.py
 └── torch_models
     ├── activations
     │   ├── relu.py
@@ -46,7 +49,8 @@ numpy implementation of deep learning models including Transformer
     └── utils
         ├── dropout.py
         ├── embedding.py
-        └── pooling.py
+        ├── pooling.py
+        └── positional_encoding.py
 '''
 
 

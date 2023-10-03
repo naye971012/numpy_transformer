@@ -31,7 +31,8 @@ numpy implementation of deep learning models including Transformer
 │       ├── dropout.py
 │       ├── embedding.py
 │       ├── pooling.py
-│       └── positional_encoding.py
+│       ├── positional_encoding.py
+│       └── flatten.py
 └── torch_models
     ├── activations
     │   ├── relu.py
@@ -50,7 +51,8 @@ numpy implementation of deep learning models including Transformer
         ├── dropout.py
         ├── embedding.py
         ├── pooling.py
-        └── positional_encoding.py
+        ├── positional_encoding.py
+        └── flatten.py
 '''
 
 
@@ -70,9 +72,6 @@ Here is the current checklist of completed items:
 - Linear Layer
 - CNN (Convolutional Neural Network)
 
-## Utilities
-- MaxPooling
-
 ## Optimizers
 - SGD
 - SGD with momentum
@@ -82,8 +81,8 @@ Here is the current checklist of completed items:
 - Dropout
 - Embedding
 - Positional Encoding
-
-
+- Flatten
+- MaxPooling
 
 # TODO LIST
 

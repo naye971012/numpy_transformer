@@ -203,5 +203,5 @@ if __name__=="__main__":
     random.seed(71)
     TOTAL_EPOCH=5
     BATCH_SIZE=48
-    LR=0.0001
-    start(train_linear_th=False,train_linear_np=True,train_cnn_th=False,train_cnn_np=False)
+    LR=0.001
+    start(train_linear_th=False,train_linear_np=False,train_cnn_th=False,train_cnn_np=True)

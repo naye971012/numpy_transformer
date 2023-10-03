@@ -26,6 +26,7 @@ from numpy_models.commons.linear import Linear_np
 from numpy_models.losses.ce import Cross_Entropy_np
 
 from numpy_models.commons.cnn import Conv2d_np
+from numpy_models.utils.pooling import MaxPooling2D_np
 
 class linear_model_th(nn.Module):
     def __init__(self, input_channel=28*28, output_channel=10) -> None:
@@ -147,18 +148,72 @@ class cnn_model_th(nn.Module):
 
 class cnn_model_np():
     def __init__(self, input_channel=28*28, output_channel=10) -> None:
-        pass
+        
+        self.conv_1 = Conv2d_np(1,8)
+        self.pooling_1 = MaxPooling2D_np()
+        self.conv_2 = Conv2d_np(8,12)
+        self.pooling_2 = MaxPooling2D_np()
+        self.linear_1 = Linear_np(7*7*12, 300)
+        self.linear_2 = Linear_np(300,output_channel)
+        self.activation_1 = Relu_np()
+        self.activation_2 = Relu_np()
+        self.activation_3 = Relu_np()
+        self.sigmoid = Sigmoid_np()
+        
+        self.criterion = Cross_Entropy_np()
         
     def forward(self,x):
-        pass
+        
+        batch_size = x.shape[0]
+        x = x.reshape(-1,1,28,28)
+        
+        #cnn part
+        x = self.conv_1(x)
+        x = self.activation_1(x)
+        x = self.pooling_1(x)
+        x = self.conv_2(x)
+        x = self.activation_2(x)
+        x = self.pooling_2(x)
+        
+        #flatten
+        x = x.reshape(batch_size, -1)
+        
+        #linear part
+        x = self.linear_1(x)
+        x = self.activation_3(x)
+        x = self.linear_2(x)
+        x = self.sigmoid(x)
     
     def loss(self,x,y):
-        pass
+        loss = self.criterion(x,y)
+        return loss
     
     
     def backward(self):
         d_prev = 1
-        pass
+        d_prev = self.criterion.backward(d_prev)
+        d_prev = self.sigmoid.backward(d_prev)
+        d_prev = self.linear_2.backward(d_prev)
+        d_prev = self.activation_3.backward(d_prev)
+        d_prev = self.linear_1.backward(d_prev)
+        
+        d_prev = d_prev.reshape(-1,12,7,7)
+        
+        d_prev = self.pooling_2.backward(d_prev)
+        d_prev = self.activation_2.backward(d_prev)
+        d_prev = self.conv_2.backward(d_prev)
+
+        d_prev = self.pooling_1.backward(d_prev)
+        d_prev = self.activation_1.backward(d_prev)
+        d_prev = self.conv_1.backward(d_prev)
     
     def update_grad(self, learning_rate, batch_size):
-        pass 
+        self.conv_2.W -= self.conv_2.dW * learning_rate / batch_size
+        self.conv_2.b -= self.conv_2.dW * learning_rate / batch_size
+        self.conv_1.W -= self.conv_1.dW * learning_rate / batch_size
+        self.conv_1.b -= self.conv_1.db * learning_rate / batch_size
+        
+        self.linear_2.W -= self.linear_2.dW * learning_rate / batch_size
+        self.linear_2.b -= self.linear_2.db * learning_rate / batch_size
+        self.linear_1.W -= self.linear_1.dW * learning_rate / batch_size
+        self.linear_1.b -= self.linear_1.db * learning_rate / batch_size    

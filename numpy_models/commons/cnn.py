@@ -33,10 +33,10 @@ class Conv2d_np:
         W = np.random.normal(0.0, limit, size=( self.k_h, self.k_w, self.in_c, self.out_c))
         b = np.zeros(shape = ( self.out_c , ) )
         
-        self.w, self.b = W, b
+        self.W, self.b = W, b
         self._padding = padding
         self._stride = stride
-        self.dw, self.db = None, None
+        self.dW, self.db = None, None
         self._a_prev = None
 
     def forward(self, a_prev: np.array) -> np.array:
@@ -59,7 +59,7 @@ class Conv2d_np:
         output_shape = self.calculate_output_dims(input_dims=a_prev.shape)
         n, h_in, w_in, _ = a_prev.shape
         _, h_out, w_out, _ = output_shape
-        h_f, w_f, _, n_f = self.w.shape
+        h_f, w_f, _, n_f = self.W.shape
         pad = self.calculate_pad_dims()
         a_prev_pad = self.pad(array=a_prev, pad=pad)
         output = np.zeros(output_shape)
@@ -73,7 +73,7 @@ class Conv2d_np:
 
                 output[:, i, j, :] = np.sum(
                     a_prev_pad[:, h_start:h_end, w_start:w_end, :, np.newaxis] *
-                    self.w[np.newaxis, :, :, :],
+                    self.W[np.newaxis, :, :, :],
                     axis=(1, 2, 3)
                 )
 
@@ -98,13 +98,13 @@ class Conv2d_np:
         """
         _, h_out, w_out, _ = da_curr.shape
         n, h_in, w_in, _ = self._a_prev.shape
-        h_f, w_f, _, _ = self.w.shape
+        h_f, w_f, _, _ = self.W.shape
         pad = self.calculate_pad_dims()
         a_prev_pad = self.pad(array=self._a_prev, pad=pad)
         output = np.zeros_like(a_prev_pad)
 
         self.db = da_curr.sum(axis=(0, 1, 2)) / n
-        self.dw = np.zeros_like(self.w)
+        self.dW = np.zeros_like(self.W)
 
         for i in range(h_out):
             for j in range(w_out):
@@ -113,17 +113,17 @@ class Conv2d_np:
                 w_start = j * self._stride
                 w_end = w_start + w_f
                 output[:, h_start:h_end, w_start:w_end, :] += np.sum(
-                    self.w[np.newaxis, :, :, :, :] *
+                    self.W[np.newaxis, :, :, :, :] *
                     da_curr[:, i:i+1, j:j+1, np.newaxis, :],
                     axis=4
                 )
-                self.dw += np.sum(
+                self.dW += np.sum(
                     a_prev_pad[:, h_start:h_end, w_start:w_end, :, np.newaxis] *
                     da_curr[:, i:i+1, j:j+1, np.newaxis, :],
                     axis=0
                 )
 
-        self.dw /= n
+        self.dW /= n
         temp = output[:, pad[0]:pad[0]+h_in, pad[1]:pad[1]+w_in, :] # [# of batch, height, width, channel]
         temp = np.transpose(temp,axes=(0,3,1,2)) # [# of batch, # of channel, height, width]
         return temp
@@ -144,7 +144,7 @@ class Conv2d_np:
         n_f - number of filters in filter volume
         """
         n, h_in, w_in, _ = input_dims
-        h_f, w_f, _, n_f = self.w.shape
+        h_f, w_f, _, n_f = self.W.shape
         if self._padding == 'same':
             return n, h_in, w_in, n_f
         elif self._padding == 'valid':
@@ -162,7 +162,7 @@ class Conv2d_np:
         w_pad - single side padding on width of the volume
         """
         if self._padding == 'same':
-            h_f, w_f, _, _ = self.w.shape
+            h_f, w_f, _, _ = self.W.shape
             return (h_f - 1) // 2, (w_f - 1) // 2
         elif self._padding == 'valid':
             return 0, 0

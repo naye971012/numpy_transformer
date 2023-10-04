@@ -84,6 +84,8 @@ Here is the current checklist of completed items:
 - Flatten
 - MaxPooling
 
+
+
 # TODO LIST
 
 ## Layers
@@ -94,3 +96,6 @@ Here is the current checklist of completed items:
 ## Utilities
 - Layer Normalization
 - Batch Normalization
+
+## Tokenizers
+- word tokenizer

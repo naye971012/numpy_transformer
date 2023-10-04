@@ -89,13 +89,16 @@ Here is the current checklist of completed items:
 # TODO LIST
 
 ## Layers
-- Attention
-- RNN
-- GRU
+- Attention -> 6
+- RNN -> 4
+- GRU -> 4
 
 ## Utilities
-- Layer Normalization
-- Batch Normalization
+- Layer Normalization -> 5
+- Batch Normalization -> 5
 
 ## Tokenizers
-- word tokenizer
+- word tokenizer -> 5
+
+## Dataset / Dataloader
+- Dataset

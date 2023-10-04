@@ -7,7 +7,7 @@ def positional_encoding(max_position:int, d_model:int, min_freq:int=1e-4) -> np.
     pos_enc = position.reshape(-1,1)*freqs.reshape(1,-1) #[max_position , 1] * [1, d_model] = [ max position , d_model ]
     pos_enc[:, ::2] = np.cos(pos_enc[:, ::2])
     pos_enc[:, 1::2] = np.sin(pos_enc[:, 1::2])
-        
+  
     return pos_enc
 
 class Embedding_with_positional_encoding_np:

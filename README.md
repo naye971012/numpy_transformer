@@ -89,16 +89,43 @@ Here is the current checklist of completed items:
 # TODO LIST
 
 ## Layers
-- Attention -> 6
-- RNN -> 4
-- GRU -> 4
+- Attention 
+- RNN 
+- GRU
 
 ## Utilities
-- Layer Normalization -> 5
-- Batch Normalization -> 5
+- Layer Normalization 
+- Batch Normalization 
 
 ## Tokenizers
-- word tokenizer -> 5
+- word tokenizer 
 
 ## Dataset / Dataloader
 - Dataset
+
+
+# Curriculum
+## **Week 1**
+- **Topic**
+  - Activation Functions (ReLU, Sigmoid)
+  - Loss Functions (Cross-Entropy, Binary Cross-Entropy)
+  - Linear Layer
+- **Week 1 Exercise**
+  - Compare NumPy implementation with Torch functions
+
+## **Week 2**
+- **Topic**
+  - Convolution Layer (2D)
+  - MaxPooling (2D)
+  - Flatten Layer
+- **Week 2 Exercise**
+  - Compare NumPy/Torch model accuracy with Linear/CNN models
+
+## **Week 3**
+- **Topic**
+  - Dropout
+  - Embedding
+  - Positional Encoding
+  - Optimizers (SGD, momentum, Adam)
+- **Week 3 Exercise**
+  - Compare NumPy model accuracy with different Optimizers

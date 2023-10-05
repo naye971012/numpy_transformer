@@ -123,15 +123,15 @@ def start(train_SGD_np=False, train_SGD_momentum_np=False, train_Adam_np=False):
         
     if(train_Adam_np):
         print("========================")
-        print("training numpy model with momentum...")
+        print("training numpy model with adam...")
         model = model_Adam_np()
         accuracy = train_np(model, train_images, train_labels, test_images, test_labels)
-        print(f"training with momentum accuracy: {accuracy * 100:.2f}%") # 33%
+        print(f"training with adam accuracy: {accuracy * 100:.2f}%") # 33%
         print("========================")
 
 if __name__=="__main__":
     random.seed(71)
     TOTAL_EPOCH=10
     BATCH_SIZE=48
-    LR=0.0001
-    start(train_SGD_np=True, train_SGD_momentum_np=True, train_Adam_np=True)
+    LR=0.001
+    start(train_SGD_np=False, train_SGD_momentum_np=False, train_Adam_np=True)

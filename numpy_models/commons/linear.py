@@ -56,9 +56,15 @@ class Linear_np:
         # W * d_prev = (D,H) * (N,H) -> (D,N)
         # (D,N).T = (N,D)
         
-        self.dW = self.x.T.dot(d_prev) 
-        self.db = np.sum(d_prev, axis=0)
-        self.grad = np.matmul(self.W, d_prev.T).T
+        if (d_prev.ndim == 2):
+            self.dW = self.x.T.dot(d_prev) 
+            self.db = np.sum(d_prev, axis=0)
+            self.grad = np.matmul(self.W, d_prev.T).T
+        else:
+            #when 3 dim
+            self.dW = np.tensordot(self.x, d_prev, axes=([0, 1], [0, 1]))
+            self.db = np.sum(d_prev, axis=(0,1) )
+            self.grad = np.dot(d_prev , self.W.T)
         
         return self.grad
 

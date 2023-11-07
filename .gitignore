@@ -1,5 +1,5 @@
 __pycache__/
 *.pyc
-dummy_codes.py
-dummy_codes.ipynb
+dummy_codes.*
 *.txt
+data/*

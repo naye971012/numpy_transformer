@@ -16,6 +16,7 @@ from numpy_models.tokenizer.word_tokenizer import Word_tokenizer_np
     download small chatting data from here
     https://www.kaggle.com/datasets/projjal1/human-conversation-training-data    
 """
+
 DATA_PATH = "numpy_transformer/data/human_chat.txt"
 
 def process_data():
@@ -62,8 +63,13 @@ def train(model, dataloader):
 
 def inference(model):
     text = ""
-    while(text == 'quit'):
+    while(True):
         text = input()
+        if text=='quit':
+            break
+        
+        output = model.predict(text)
+        print(output)
 
 def main():
     
@@ -85,6 +91,7 @@ def main():
     model = train(model, dataloader)
 
     #inference
+    print("train done! write chatting input.")
     inference(model)
 
 if __name__=="__main__":

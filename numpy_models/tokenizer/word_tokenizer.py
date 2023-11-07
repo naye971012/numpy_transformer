@@ -33,6 +33,12 @@ class Word_tokenizer_np:
             output_list.append(list_tokenized)
         return output_list
     
+    def convert_one_ids_to_tokens(self, sentence: List[int]) -> str:
+        output = ""
+        for word in sentence:
+            output = output + self.vocab.idx2word[word] + " "
+        return output
+    
     def convert_one_tokens_to_ids(self, sentence: List[str]) -> List[int]:
         """
         convert one sentence into ids

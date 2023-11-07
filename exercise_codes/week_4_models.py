@@ -98,6 +98,11 @@ class myModel:
         
         self.optimizer.step()
 
+    def predict(self, text:str):
+        output = self.forward([text])[0]
+        output_ids = np.argmax(output,axis=1)
+        output_txt = self.tokenizer.convert_one_ids_to_tokens(output_ids)
+        return output_txt
 
     def __call__(self, x):
         return self.forward(x)

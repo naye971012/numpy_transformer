@@ -58,17 +58,18 @@ class myModel:
         #x: [# of batch, max_length, # of embedding(300)]
         x = self.embedding(x)
         
+        #x: [# of batch, max_length, 400]
         x = self.rnn1(x)
         
-        #x: [# of batch, max_length, vocab size] with logit
+        #x: [# of batch, max_length, 400] with logit
         x = self.activation1(x)
         x = self.linear1(x)
         
-        #x: [# of batch, max_length, vocab size] with logit
+        #x: [# of batch, max_length, 300] with logit
         x = self.activation2(x)
         x = self.linear2(x)
         
-        #x: [# of batch, max_length, vocab size] with prob
+        #x: [# of batch, max_length, 300] with prob
         x = self.softmax(x)
         
         return x

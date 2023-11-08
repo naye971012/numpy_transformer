@@ -9,6 +9,8 @@ Here is the current checklist of completed items:
 ## Activation Functions
 - ReLU (Rectified Linear Unit)
 - Sigmoid
+- Softmax
+- Tanh
 
 ## Loss Functions
 - Cross-Entropy Loss
@@ -17,6 +19,7 @@ Here is the current checklist of completed items:
 ## Layers
 - Linear Layer
 - CNN (Convolutional Neural Network)
+- RNN (Recurrent Neural Network)
 
 ## Optimizers
 - SGD
@@ -30,6 +33,9 @@ Here is the current checklist of completed items:
 - Flatten
 - MaxPooling
 
+## Tokenizer
+- Vocabulary set
+- Word Tokenizer
 
 # Curriculum
 ## **Week 1 - Basis**
@@ -57,12 +63,12 @@ Here is the current checklist of completed items:
 - **Week 3 Exercise**
   - Compare NumPy model accuracy with different Optimizers
 
-## **Week 4 - RNN/Tokenizer(TODO)**
+## **Week 4 - RNN/Tokenizer**
 - **Topic**
   - RNN
   - Word Tokenzizer
 - **Week 4 Exercise**
-  - Train Tokenizer
+  - Train an RNN model using a word tokenizer and monitor only the loss decline.
 
 ## **Week 5 - LSTM/Seq2Seq(TODO)**
 - **Topic**

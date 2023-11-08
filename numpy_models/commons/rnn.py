@@ -4,15 +4,9 @@ from numpy_models.activations.tanh import Tanh_np
 from numpy_models.activations.softmax import softmax_np
 
 """
+    currently, this works only at batch size 1 -> TODO
     our rnn is defined as many-to-many type
     
-                           y_1        y_2        y_3
-                            |          |          |
-    hidden -> [ w_1 ] -> [ w_2 ] -> [ w_3 ] -> [ w_4 ] -> [ w_5 ]
-                 |          |          
-                x_1        x_2        
-
-
                 y_1        y_2        y_3       <EOS>      <EOS>
                  |          |          |          |          |
     hidden -> [ w_1 ] -> [ w_2 ] -> [ w_3 ] -> [ w_4 ] -> [ w_5 ]

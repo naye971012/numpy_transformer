@@ -57,6 +57,8 @@ class RNN_np:
         """
         self.Wya, self.Wax, self.Waa, self.by, self.b = params
 
+        self.params = [self.Wya, self.Wax, self.Waa, self.by, self.b]
+        
     def forward(self, input_X):
         """
         Computes the forward propagation of the RNN.
@@ -126,26 +128,50 @@ class RNN_np:
         gradients = self._define_gradients()
         self.dWax, self.dWaa, self.dWya, self.db, self.dby, dhidden_next = gradients
 
+        """
+        input: [max_len, batch, input_dim] (20, 1, 300) -> (1,300)
+        output: [max_len, batch, output_dim]
+        weights_ya : numpy.array [out_dim , hidden_dim ] -> (300, 2)
+        weights_ax : numpy.array [hidden_dim, input_dim] (2, 300)
+        weights_aa : numpy.array [hidden_dim, hidden_dim] (2, 2)
+        bias_y : numpy.array [out_dim, 1]
+        bias : numpy.array [hidden_dim, 1] -> (2,1)
+        hidden = [hidden_dim, 1]
+        """
+        #    a -- Hidden states for every time-step, numpy array of shape (n_a, m, T_x)
+        #    y -- Predictions for every time-step, numpy array of shape (n_y, m, T_x)
+        #    c -- The value of the cell state, numpy array of shape (n_a, m, T_x)
+        out = list()
+        
         for index, cur_d_prev in reversed(list(enumerate(d_prev))):
-            dy = cur_d_prev
+            dy = cur_d_prev.T # [batch, input_dim] -> [input_dim, batch]
 
             # hidden actual
             hidden = self.hidden_list[index + 1]
             hidden_prev = self.hidden_list[index]
 
             # gradients y
-            self.dWya += np.dot(dy, hidden.T)
-            self.dby += dy
-            dhidden = np.dot(self.Wya.T, dy) + dhidden_next
+            self.dWya += np.dot(dy, hidden.T) #[out_dim,1] * [1, hidden] = [out_dim, hidden]
+            self.dby += dy # [out_dim, 1]
+            dhidden = np.dot(self.Wya.T, dy) + dhidden_next # [hidden, out] * [out,1] = [hidden, 1]
     
             # gradients a
-            dtanh = self.layers_tanh[index].backward(dhidden)
-            self.db += dtanh
-            self.dWax += np.dot(dtanh, self.input_X[index].T)
-            self.dWaa += np.dot(dtanh, hidden_prev.T)
-            dhidden_next = np.dot(self.Waa.T, dtanh)
+            dtanh = self.layers_tanh[index].backward(dhidden) # [hidden, 1]
+            self.db += dtanh # [hidden, 1]
+            self.dWax += np.dot(dtanh, self.input_X[index]) # [hidden, input]
+            self.dWaa += np.dot(dtanh, hidden_prev.T) # [hiddne, 1] * [1, hidden] = [hidden, hidden]
+            dhidden_next = np.dot(self.Waa.T, dtanh) # [hidden, hidden] * [hidden, 1] = [hidden, 1]
 
+            out.append( self.Wax.T.dot(dtanh) ) # [input, hidden] * [hidden, batch(1)] = [input , batch]
+        
+        #out =  [max_len, input, batch]
+        out = np.array(out)
 
+        #output dim = [batch, max_len, input_dim]
+        out = np.transpose(out, (2, 0, 1))
+
+        return out
+        
     def clip(self, clip_value):
         """
         Clips the gradients in order to avoisd the problem of 

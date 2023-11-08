@@ -18,6 +18,7 @@ from numpy_models.commons.linear import Linear_np
 from numpy_models.commons.rnn import RNN_np
 
 from numpy_models.optimizer.Adam import Adam_np
+from numpy_models.optimizer.Adam_upgraded import Adam_new_np
 
 from numpy_models.losses.ce import Cross_Entropy_np
 
@@ -29,14 +30,16 @@ class myModel:
         
         self.criterion = Cross_Entropy_np()
         self.optimizer = Adam_np()
+        self.optimizer2 = Adam_new_np() #TODO: unify to optimizer
+        
         self.tokenizer = tokenizer
         
         self.embedding = Embedding_np(len(self.tokenizer),300)
         
-        self.rnn1 = RNN_np(300,300,2)
+        self.rnn1 = RNN_np(300,400,2)
         
         self.activation1 = Relu_np()
-        self.linear1 = Linear_np(300,300)
+        self.linear1 = Linear_np(400,300)
         
         self.activation2 = Relu_np()
         self.linear2 = Linear_np(300,len(self.tokenizer))
@@ -79,6 +82,8 @@ class myModel:
         d_prev = self.linear1.backward(d_prev)
         d_prev = self.activation1.backward(d_prev)
         
+        d_prev = self.rnn1.backward(d_prev)
+        
         d_prev = self.embedding.backward(d_prev)
         
         return d_prev
@@ -96,12 +101,14 @@ class myModel:
 
 
     def update_grad(self, learning_rate, batch_size):
-
+        
+        self.rnn1 = self.optimizer2.update_grad('rnn1', self.rnn1, learning_rate/batch_size)
         self.linear2 = self.optimizer.update_grad('linear_2', self.linear2, learning_rate/batch_size, True)
         self.linear1 = self.optimizer.update_grad('linear_1', self.linear1, learning_rate/batch_size, True)
         self.embedding = self.optimizer.update_grad('embedding', self.embedding, learning_rate/batch_size, False)
         
         self.optimizer.step()
+        self.optimizer2.step()
 
     def predict(self, text:str):
         output = self.forward([text])[0]

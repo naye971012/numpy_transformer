@@ -29,6 +29,7 @@ class Adam_np:
         self.t = self.t + 1
     
     def update_grad(self, layer_name:str, layer, LR:float, have_db:bool):
+        
         """
 
         Args:

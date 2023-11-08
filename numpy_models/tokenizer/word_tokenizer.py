@@ -1,5 +1,7 @@
 from typing import List
 import numpy as np
+import re
+
 from .vocab import Vocabulary
 
 
@@ -29,9 +31,18 @@ class Word_tokenizer_np:
         """
         output_list = list()
         for cur_list in input_list:
+            cur_list = self.clean_text(cur_list)
             list_tokenized = cur_list.split(' ') #tokenize by blank
             output_list.append(list_tokenized)
         return output_list
+    
+    def clean_text(self, sentence:str) -> str:
+        """
+        convert all text into lowercase and remain only alphabat (for vocab hit ratio)
+        """
+        sentence = sentence.lower()
+        sentence = re.sub(r'[^a-z ]', '', sentence)
+        return sentence
     
     def convert_one_ids_to_tokens(self, sentence: List[int]) -> str:
         output = ""

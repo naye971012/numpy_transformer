@@ -95,7 +95,7 @@ def main():
     inference(model)
 
 if __name__=="__main__":
-    BATCH_SIZE = 10
-    TOTAL_EPOCH = 5
+    BATCH_SIZE = 1
+    TOTAL_EPOCH = 50
     LR = 1e-3
     main()

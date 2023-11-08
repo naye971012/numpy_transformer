@@ -15,6 +15,7 @@ from numpy_models.tokenizer.word_tokenizer import Word_tokenizer_np
 from numpy_models.utils.embedding import Embedding_np
 
 from numpy_models.commons.linear import Linear_np
+from numpy_models.commons.rnn import RNN_np
 
 from numpy_models.optimizer.Adam import Adam_np
 
@@ -31,6 +32,8 @@ class myModel:
         self.tokenizer = tokenizer
         
         self.embedding = Embedding_np(len(self.tokenizer),300)
+        
+        self.rnn1 = RNN_np(300,300,2)
         
         self.activation1 = Relu_np()
         self.linear1 = Linear_np(300,300)
@@ -51,6 +54,8 @@ class myModel:
         
         #x: [# of batch, max_length, # of embedding(300)]
         x = self.embedding(x)
+        
+        x = self.rnn1(x)
         
         #x: [# of batch, max_length, vocab size] with logit
         x = self.activation1(x)

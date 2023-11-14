@@ -70,12 +70,13 @@ Here is the current checklist of completed items:
 - **Week 4 Exercise**
   - Train an RNN model using a word tokenizer and monitor only the loss decline.
 
-## **Week 5 - LSTM/Seq2Seq(TODO)**
+## **Week 5 - Normalization/Residual Block(TODO)**
 - **Topic**
-  - LSTM
-  - Seq2Seq
+  - LayerNorm
+  - BatchNorm
+  - Residual Connection
 - **Week 5 Exercise**
-  - Train Chatbot with numpy model
+  - compare w/wo Normalization Layers
 
 ## **Week 6 - Attention(TODO)**
 - **Topic**

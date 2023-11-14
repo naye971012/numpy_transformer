@@ -80,14 +80,13 @@ Here is the current checklist of completed items:
   - BatchNorm
   - Residual Connection
 - **Week 5 Exercise**
-  - compare w/wo Normalization Layers in terms of converge speed
+  - compare w/wo Normalization Layers in terms of converge speed/accuracy
 
 ## **Week 6 - Attention(TODO)**
 - **Topic**
   - Attention
-  - Normalization (Layer Normalization, Batch Normalization)
 - **Week 6 Exercise**
-  - Train Chatbot with numpy model (Advanced)
+  - None
 
 
 

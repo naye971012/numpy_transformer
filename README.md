@@ -41,6 +41,9 @@ Here is the current checklist of completed items:
 - Batch Normalization
 - Layer Normalization
 
+## Blocks
+- Plain Residual Block
+
 # Curriculum
 ## **Week 1 - Basis**
 - **Topic** 
@@ -86,7 +89,7 @@ Here is the current checklist of completed items:
 - **Topic**
   - Attention
 - **Week 6 Exercise**
-  - None
+  - Visualize Attention layer
 
 
 

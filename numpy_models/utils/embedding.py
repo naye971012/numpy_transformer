@@ -2,13 +2,17 @@ import numpy as np
 
 class Embedding_np:
     def __init__(self, num_emb, num_dim) -> None:
+        
+        self.params = dict()
+        self.grads = dict()
+        
         self.num_emb = num_emb
         self.num_dim = num_dim
         
         self.forward_input = None
         
         limit = np.sqrt(2 / float(num_dim))
-        self.W = np.random.normal(0.0, limit, size=(num_emb,num_dim))
+        self.params['W'] = np.random.normal(0.0, limit, size=(num_emb,num_dim))
         
     def forward(self,x:np.array) -> np.array:
         """
@@ -21,7 +25,7 @@ class Embedding_np:
         """
         
         self.forward_input = x
-        output = self.W[x[:]]
+        output = self.params['W'][x[:]]
         
         return output
         
@@ -40,8 +44,8 @@ class Embedding_np:
         #b, vocab, dim = d_prev.shape
         #vocab_len, dim = self.W.shape
         
-        self.dW = np.zeros_like(self.W)
-        np.add.at(self.dW, self.forward_input, d_prev)
+        self.grads['dW'] = np.zeros_like(self.params['W'])
+        np.add.at(self.grads['dW'], self.forward_input, d_prev)
         
         #expanded_d_prev = np.zeros(shape=(b,vocab_len,dim))
         #expanded_d_prev[:,self.forward_input[:]] = d_prev

@@ -1,3 +1,8 @@
+"""
+change algorithm of adam for code visability    
+
+"""
+
 import numpy as np
 
 class Adam_np:
@@ -28,64 +33,44 @@ class Adam_np:
     def step(self):
         self.t = self.t + 1
     
-    def update_grad(self, layer_name:str, layer, LR:float, have_db:bool):
+    def update_grad(self, layer_name:str, layer, LR:float):
         
         """
-
         Args:
             layer_name (str): _description_
             layer (_type_): layer(ex.)
             LR (float): Learning rate
-            have_db (bool): layer에 dW외에 db가 있는지 유무, default=True
         """
-        self.save_velocity(layer_name,layer,have_db)
-        self.save_momentum(layer_name,layer,have_db)
-        
-        momentum_hat = self.momentum[f"{layer_name}_dW"] / (1 - (self.beta1 ** self.t) )
-        velocity_hat = self.velocity[f"{layer_name}_dW"] / (1 - (self.beta2 ** self.t) )
-        layer.W = layer.W - LR * momentum_hat / (np.sqrt(velocity_hat + self.eps) )
-        
-        if not have_db:
-            return layer
-        
-        momentum_hat = self.momentum[f"{layer_name}_db"] / (1 - (self.beta1 ** self.t) )
-        velocity_hat = self.velocity[f"{layer_name}_db"] / (1 - (self.beta2 ** self.t) )
-        layer.b = layer.b - LR * momentum_hat / (np.sqrt(velocity_hat + self.eps) )
-        
-        return layer
+        self.save_velocity(layer_name,layer)
+        self.save_momentum(layer_name,layer)
 
-    def save_velocity(self,layer_name, layer, have_db):
-        
-        if layer_name not in self.velocity.keys():
-            self.velocity[f"{layer_name}_dW"] = (1-self.beta2) * (layer.dW **2)
-        else:
-            self.velocity[f"{layer_name}_dW"] = self.beta2 * self.velocity[f"{layer_name}_dW"] + \
-                                                (1-self.beta2) * (layer.dW **2)
+        for param_key, grad_key in zip( sorted(layer.params.keys()), sorted(layer.grads.keys()) ):
+            name = (layer_name + grad_key)
 
+            momentum_hat = self.momentum[name] / (1 - (self.beta1 ** self.t) )
+            velocity_hat = self.velocity[name] / (1 - (self.beta2 ** self.t) )
+            layer.params[param_key] = layer.params[param_key] - LR * momentum_hat / (np.sqrt(velocity_hat + self.eps) )
+
+    def save_velocity(self,layer_name, layer):
         
-        if not have_db:
-            return
-        
-        if layer_name not in self.velocity.keys():
-            self.velocity[f"{layer_name}_db"] = (1-self.beta2) * (layer.db **2)
-        else:
-            self.velocity[f"{layer_name}_db"] = self.beta2 * self.velocity[f"{layer_name}_db"] + \
-                                                (1-self.beta2) * (layer.db **2)
+        for param_key, grad_key in zip( sorted(layer.params.keys()), sorted(layer.grads.keys()) ):
+            name = (layer_name + grad_key)
+            
+            if name not in self.velocity.keys():
+                self.velocity[name] = (1-self.beta2) * (layer.grads[grad_key] **2)
+            else:
+                self.velocity[name] = self.beta2 * self.velocity[name] + \
+                                                    (1-self.beta2) * (layer.grads[grad_key] **2)
+
     
-    def save_momentum(self,layer_name, layer, have_db):
+    def save_momentum(self,layer_name, layer):
         
-        if layer_name not in self.momentum.keys():
-            self.momentum[f"{layer_name}_dW"] = (1-self.beta1) * (layer.dW)
-        else:
-            self.momentum[f"{layer_name}_dW"] = self.beta1 * self.momentum[f"{layer_name}_dW"] + \
-                                                (1-self.beta1) * (layer.dW)
+        for param_key, grad_key in zip( sorted(layer.params.keys()), sorted(layer.grads.keys()) ):
+            name = (layer_name + grad_key)
 
-        
-        if not have_db:
-            return
-        
-        if layer_name not in self.momentum.keys():
-            self.momentum[f"{layer_name}_db"] = (1-self.beta1) * (layer.db)
-        else:
-            self.momentum[f"{layer_name}_db"] = self.beta1 * self.momentum[f"{layer_name}_db"] + \
-                                                (1-self.beta1) * (layer.db)
+            if name not in self.momentum.keys():
+                self.momentum[name] = (1-self.beta1) * (layer.grads[grad_key])
+            else:
+                self.momentum[name] = self.beta1 * self.momentum[name] + \
+                                                    (1-self.beta1) * (layer.grads[grad_key])
+                        

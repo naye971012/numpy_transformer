@@ -12,6 +12,9 @@ def positional_encoding(max_position:int, d_model:int, min_freq:int=1e-4) -> np.
 
 class Embedding_with_positional_encoding_np:
     def __init__(self, num_emb:int, num_dim:int) -> None:
+        self.params = dict()
+        self.grads = dict()
+        
         self.num_emb = num_emb
         self.num_dim = num_dim
         
@@ -19,7 +22,7 @@ class Embedding_with_positional_encoding_np:
         self.pos_enc = positional_encoding(num_emb,num_dim)
         
         limit = np.sqrt(2 / float(num_dim))
-        self.W = np.random.normal(0.0, limit, size=(num_emb,num_dim))
+        self.params['W'] = np.random.normal(0.0, limit, size=(num_emb,num_dim))
 
     def forward(self,x:np.array) -> np.array:
         """
@@ -32,7 +35,7 @@ class Embedding_with_positional_encoding_np:
         """
         
         self.forward_input = x
-        output = self.W[x[:]] + self.pos_enc[ :x.shape[1]]
+        output = self.params['W'][x[:]] + self.pos_enc[ :x.shape[1]]
         
         return output
         
@@ -49,12 +52,12 @@ class Embedding_with_positional_encoding_np:
         """
         
         b, vocab, dim = d_prev.shape
-        vocab_len, dim = self.W.shape
+        vocab_len, dim = self.params['W'].shape
         
         expanded_d_prev = np.zeros(shape=(b,vocab_len,dim))
         expanded_d_prev[:,self.forward_input[:]] = d_prev
 
-        self.dW = np.mean(expanded_d_prev,axis=0)
+        self.grads['dW'] = np.mean(expanded_d_prev,axis=0)
 
         return None
     

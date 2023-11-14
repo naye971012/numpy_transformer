@@ -35,6 +35,9 @@ class RNN_np:
         hidden_dim : int
             Number of units in the RNN cell.
         """
+        self.params = dict()
+        self.grads = dict()
+        
         self.input_dim = input_dim
         self.output_dim = output_dim
         self.hidden_dim = hidden_dim
@@ -50,8 +53,11 @@ class RNN_np:
         bias : numpy.array [hidden_dim, 1]
         """
         self.Wya, self.Wax, self.Waa, self.by, self.b = params
-
-        self.params = [self.Wya, self.Wax, self.Waa, self.by, self.b]
+        self.params['Wya'] = self.Wya
+        self.params['Wax'] = self.Wax
+        self.params['Waa'] = self.Waa
+        self.params['by'] = self.by
+        self.params['b'] = self.b
         
     def forward(self, input_X):
         """
@@ -92,11 +98,11 @@ class RNN_np:
         """
         #repeat for max sequence length
         for input_x, layer_tanh, layer_softmax in zip(input_X, self.layers_tanh, self.layers_softmax):
-            input_tanh = np.dot(self.Wax, input_x.T) + np.dot(self.Waa, hidden) + self.b
+            input_tanh = np.dot(self.params['Wax'], input_x.T) + np.dot(self.params['Waa'], hidden) + self.params['b']
             hidden = layer_tanh.forward(input_tanh)
             self.hidden_list.append(hidden)
 
-            input_softmax = np.dot(self.Wya, hidden) + self.by
+            input_softmax = np.dot(self.params['Wya'], hidden) + self.params['by']
             y_pred = layer_softmax.forward(input_softmax) # (300, 1)
             self.y_preds.append(y_pred) #add (output_dim, batch)
 
@@ -106,7 +112,6 @@ class RNN_np:
         self.y_preds = np.transpose(self.y_preds, (2, 0, 1))
         
         return self.y_preds
-    
 
     def backward(self, d_prev):  
         """
@@ -121,7 +126,12 @@ class RNN_np:
         
         gradients = self._define_gradients()
         self.dWax, self.dWaa, self.dWya, self.db, self.dby, dhidden_next = gradients
-
+        self.grads['dWya'] = self.dWya
+        self.grads['dWax'] = self.dWax
+        self.grads['dWaa'] = self.dWaa
+        self.grads['dby'] = self.dby
+        self.grads['db'] = self.db
+        
         """
         input: [max_len, batch, input_dim] (20, 1, 300) -> (1,300)
         output: [max_len, batch, output_dim]
@@ -138,34 +148,34 @@ class RNN_np:
         out = list()
         
         for index, cur_d_prev in reversed(list(enumerate(d_prev))):
-            dy = cur_d_prev.T # [batch, input_dim] -> [input_dim, batch]
+            self.grads['dy'] = cur_d_prev.T # [batch, input_dim] -> [input_dim, batch]
 
             # hidden actual
             hidden = self.hidden_list[index + 1]
             hidden_prev = self.hidden_list[index]
 
             # gradients y
-            self.dWya += np.dot(dy, hidden.T) #[out_dim,1] * [1, hidden] = [out_dim, hidden]
-            self.dby += dy # [out_dim, 1]
-            dhidden = np.dot(self.Wya.T, dy) + dhidden_next # [hidden, out] * [out,1] = [hidden, 1]
+            self.grads['dWya'] += np.dot(self.grads['dy'], hidden.T) #[out_dim,1] * [1, hidden] = [out_dim, hidden]
+            self.grads['dby'] += self.grads['dy'] # [out_dim, 1]
+            dhidden = np.dot(self.params['Wya'].T, self.grads['dy']) + dhidden_next # [hidden, out] * [out,1] = [hidden, 1]
     
             # gradients a
             dtanh = self.layers_tanh[index].backward(dhidden) # [hidden, 1]
-            self.db += dtanh # [hidden, 1]
-            self.dWax += np.dot(dtanh, self.input_X[index]) # [hidden, input]
-            self.dWaa += np.dot(dtanh, hidden_prev.T) # [hiddne, 1] * [1, hidden] = [hidden, hidden]
-            dhidden_next = np.dot(self.Waa.T, dtanh) # [hidden, hidden] * [hidden, 1] = [hidden, 1]
+            self.grads['db'] += dtanh # [hidden, 1]
+            self.grads['dWax'] += np.dot(dtanh, self.input_X[index]) # [hidden, input]
+            self.grads['dWaa'] += np.dot(dtanh, hidden_prev.T) # [hiddne, 1] * [1, hidden] = [hidden, hidden]
+            dhidden_next = np.dot(self.params['Waa'].T, dtanh) # [hidden, hidden] * [hidden, 1] = [hidden, 1]
 
-            out.append( self.Wax.T.dot(dtanh) ) # [input, hidden] * [hidden, batch(1)] = [input , batch]
+            out.append( self.params['Wax'].T.dot(dtanh) ) # [input, hidden] * [hidden, batch(1)] = [input , batch]
         
         #out =  [max_len, input, batch]
         out = np.array(out)
 
         #output dim = [batch, max_len, input_dim]
         out = np.transpose(out, (2, 0, 1))
-
-        return out
         
+        return out
+
     def clip(self, clip_value):
         """
         Clips the gradients in order to avoisd the problem of 
@@ -176,7 +186,7 @@ class RNN_np:
         clip_value : int
             Number that will be used to clip the gradients.
         """
-        for gradient in [self.dWax, self.dWaa, self.dWya, self.db, self.dby]:
+        for gradient in [self.grads['dWax'], self.grads['dWaa'], self.grads['dWya'], self.grads['db'], self.grads['dby']]:
             np.clip(gradient, -clip_value, clip_value, out=gradient)
         
     def _initialize_parameters(self, input_dim, output_dim, hidden_dim):

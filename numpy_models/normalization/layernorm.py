@@ -18,6 +18,7 @@ class Layer_Normalization_np:
     
     def forward(self, x:np.array, train:bool=True):
         #x.shape = [# of batch, num_features1, num_features2, ...]
+        self.x = x
         self.num_batch = x.shape[0] # [# of batch]
         
         #each features mu and var
@@ -45,7 +46,7 @@ class Layer_Normalization_np:
         dmean = -dx.sum(axis=1, keepdims=True)
         dstd = -np.sum(self.standard_x * dx, axis=1, keepdims=True) / (std) # [# of batch, # of feat]
         
-        dx += (1.0 / d_prev.shape[1]) * (x - mean) * dstd
+        dx += (1.0 / d_prev.shape[1]) * (self.x - mean) * dstd
         
         dx = dx.reshape(original_shape) #restore flatten d_prev
         return dx

@@ -102,14 +102,17 @@ def main():
     print("========================\n\n")
 
     model_1 = model_without_norm()
-    model_2 = model_with_norm()
+    model_2 = model_with_layer_norm()
+    model_3 = model_with_batch_norm()
     
     print("========train without normalization=======================")
     train_np(model_1,train_images,train_labels,test_images,test_labels)
     print("\n\n")
-    print("========train with    normalization=======================")
+    print("========train with layer normalization=======================")
     train_np(model_2,train_images,train_labels,test_images,test_labels)
-
+    print("\n\n")
+    print("========train with batch normalization=======================")
+    train_np(model_3,train_images,train_labels,test_images,test_labels)
 
 if __name__=="__main__":
     

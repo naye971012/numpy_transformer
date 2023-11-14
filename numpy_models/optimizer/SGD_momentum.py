@@ -12,7 +12,7 @@ class SGD_momentum_np:
         V(t) = a * V(t-1) - cost
         
         """
-    def update_grad(self, layer_name:str, layer, LR:float, have_db:bool):
+    def update_grad(self, layer_name:str, layer, LR:float):
         """
 
         Args:
@@ -21,29 +21,20 @@ class SGD_momentum_np:
             LR (float): Learning rate
             have_db (bool): layer에 dW외에 db가 있는지 유무, default=True
         """
-        self.save_velocity(layer_name,layer,have_db)
+        self.save_velocity(layer_name,layer)
         
-        layer.W = layer.W + LR * self.velocity[f"{layer_name}_dW"]
+        for param_key, grad_key in zip( sorted(layer.params.keys()), sorted(layer.grads.keys()) ):
+            layer.params[param_key] += LR * self.velocity[layer_name + grad_key]
         
-        if not have_db:
-            return layer
-        
-        layer.b = layer.b + LR * self.velocity[f"{layer_name}_db"]
-        
-        return layer
 
-    def save_velocity(self,layer_name, layer, have_db):
+    def save_velocity(self,layer_name, layer):
         
-        if layer_name not in self.velocity.keys():
-            self.velocity[f"{layer_name}_dW"] = -1 * layer.dW
-        else:
-            self.velocity[f"{layer_name}_dW"] = self.alpha * self.velocity[f"{layer_name}_dW"] - layer.dW
+        for param_key, grad_key in zip( sorted(layer.params.keys()), sorted(layer.grads.keys()) ):
+              
+            if (layer_name + grad_key) not in self.velocity.keys():
+                self.velocity[layer_name + grad_key] = -1 * layer.grads[grad_key]
+            else:
+                self.velocity[layer_name + grad_key] = self.alpha * self.velocity[layer_name + grad_key] - layer.grads[grad_key]
 
-        
-        if not have_db:
-            return
-        
-        if layer_name not in self.velocity.keys():
-            self.velocity[f"{layer_name}_db"] = -1 * layer.db
-        else:
-            self.velocity[f"{layer_name}_db"] = self.alpha * self.velocity[f"{layer_name}_db"] - layer.db
+    def step(self):
+        pass

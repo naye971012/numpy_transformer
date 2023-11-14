@@ -5,6 +5,9 @@ class Batch_Normalization_1D_np:
                        eps:float = 1e-5,
                        momentum: float = 0.9):
         #input is [# of batch, # of feature]
+        self.params = dict()
+        self.grads = dict() 
+        
         self.num_features = num_features 
         self.eps = eps
         self.momentum = momentum
@@ -13,22 +16,14 @@ class Batch_Normalization_1D_np:
         self.running_batch_mu = None #for inference 
         
         
-        self.W = np.ones((1, num_features)) #init params
-        self.b = np.zeros((1, num_features)) #init params
+        self.params['W'] = np.ones((1, num_features)) #init params
+        self.params['b'] = np.zeros((1, num_features)) #init params
         
-        self.dW = None #init grad
-        self.db = None #init grad
+        self.grads['dW'] = None #init grad
+        self.grads['db'] = None #init grad
         
-        self.define_grads_and_params()
         self.flag = 0
         
-    def define_grads_and_params(self):
-        """
-        important!!!
-        define self.params and self.grads for optimizer update
-        """
-        self.params = [self.W, self.b]
-        self.grads = [self.dW, self.db] 
     
     def save_train_mu_var(self):
         #first init
@@ -62,12 +57,12 @@ class Batch_Normalization_1D_np:
         self.x_minus_mean = x - self.batch_mu #[# of batch, # of feat]
         self.standard_x = self.x_minus_mean / self.batch_std #[# of batch, # of feat]
 
-        self.output = self.W * self.standard_x + self.b # [1, # of feature] * [# of batch, # of feature] + [1, # of feature]
+        self.output = self.params['W'] * self.standard_x + self.params['b'] # [1, # of feature] * [# of batch, # of feature] + [1, # of feature]
         # == [# of batch, # of feature]
         return self.output
         
     def backward(self, d_prev):
-        standard_grad = d_prev * self.W #[1, # of feature]
+        standard_grad = d_prev * self.params['W'] #[1, # of feature]
 
         var_grad = np.sum(standard_grad * self.x_minus_mean * -0.5 * self.batch_var ** (-3/2),
                           axis=0, keepdims=True) #[# of feat]
@@ -79,9 +74,9 @@ class Batch_Normalization_1D_np:
                             var_grad * np.sum(-aux_x_minus_mean, axis=0,
                             keepdims=True)) #[# of feat]
 
-        self.dW = np.sum(d_prev * self.standard_x, axis=0,
+        self.grads['dW'] = np.sum(d_prev * self.standard_x, axis=0,
                                  keepdims=True) # [1, # of feature]
-        self.db = np.sum(d_prev, axis=0, keepdims=True) #[ 1, # of feature]
+        self.grads['db'] = np.sum(d_prev, axis=0, keepdims=True) #[ 1, # of feature]
 
         return standard_grad * stddev_inv + var_grad * aux_x_minus_mean + \
                mean_grad / self.num_batch #[# of batch, # of feature]

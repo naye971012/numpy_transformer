@@ -4,13 +4,18 @@ import copy
 
 class Linear_np:
     def __init__(self, num_hidden_1, num_hidden_2):
+        
+        self.params = dict()
+        self.grads = dict()
+        
         limit = np.sqrt(2 / float(num_hidden_1))
-        self.W = np.random.normal(0.0, limit, size=(num_hidden_1, num_hidden_2))
-        self.b = np.zeros(num_hidden_2)
+        self.params['W'] = np.random.normal(0.0, limit, size=(num_hidden_1, num_hidden_2))
+        self.params['b'] = np.zeros(num_hidden_2)
+
+        self.grads['dW'] = None
+        self.grads['db'] = None
 
         self.output = None
-        self.dW = None
-        self.db = None
         self.grad = None
         
     def forward(self, x):
@@ -28,7 +33,7 @@ class Linear_np:
         """
 
         self.x = x
-        self.out = np.matmul(self.x, self.W) + self.b
+        self.out = np.matmul(self.x, self.params['W']) + self.params['b']
 
         return self.out
 
@@ -59,14 +64,14 @@ class Linear_np:
         # (D,N).T = (N,D)
         
         if (d_prev.ndim == 2):
-            self.dW = self.x.T.dot(d_prev) 
-            self.db = np.sum(d_prev, axis=0)
-            self.grad = np.matmul(self.W, d_prev.T).T
+            self.grads['dW'] = self.x.T.dot(d_prev) 
+            self.grads['db'] = np.sum(d_prev, axis=0)
+            self.grad = np.matmul(self.params['W'], d_prev.T).T
         else:
             #when 3 dim
-            self.dW = np.tensordot(self.x, d_prev, axes=([0, 1], [0, 1]))
-            self.db = np.sum(d_prev, axis=(0,1) )
-            self.grad = np.dot(d_prev , self.W.T)
+            self.grads['dW'] = np.tensordot(self.x, d_prev, axes=([0, 1], [0, 1]))
+            self.grads['db'] = np.sum(d_prev, axis=(0,1) )
+            self.grad = np.dot(d_prev , self.params['W'].T)
         
         return self.grad
 

@@ -37,9 +37,13 @@ Here is the current checklist of completed items:
 - Vocabulary set
 - Word Tokenizer
 
+## Normalization
+- Batch Normalization
+- Layer Normalization
+
 # Curriculum
 ## **Week 1 - Basis**
-- **Topic**
+- **Topic** 
   - Activation Functions (ReLU, Sigmoid)
   - Loss Functions (Cross-Entropy, Binary Cross-Entropy)
   - Linear Layer
@@ -70,13 +74,13 @@ Here is the current checklist of completed items:
 - **Week 4 Exercise**
   - Train an RNN model using a word tokenizer and monitor only the loss decline.
 
-## **Week 5 - Normalization/Residual Block(TODO)**
+## **Week 5 - Normalization/Residual Block**
 - **Topic**
   - LayerNorm
   - BatchNorm
   - Residual Connection
 - **Week 5 Exercise**
-  - compare w/wo Normalization Layers
+  - compare w/wo Normalization Layers in terms of converge speed
 
 ## **Week 6 - Attention(TODO)**
 - **Topic**

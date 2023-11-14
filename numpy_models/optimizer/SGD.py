@@ -26,3 +26,6 @@ class SGD_np:
         layer.b = layer.b - LR * layer.db
         
         return layer
+    
+    def step(self):
+        pass

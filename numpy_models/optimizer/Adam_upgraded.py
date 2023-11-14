@@ -57,24 +57,24 @@ class Adam_new_np:
 
     def save_velocity(self,layer_name, layer):
         
-        for i, param in enumerate(layer.params):
+        for i, grad in enumerate(layer.grads):
             name = f"{layer_name}_{i}"
-        
+            
             if name not in self.velocity.keys():
-                self.velocity[name] = (1-self.beta2) * (param **2)
+                self.velocity[name] = (1-self.beta2) * (grad **2)
             else:
                 self.velocity[name] = self.beta2 * self.velocity[name] + \
-                                                    (1-self.beta2) * (param **2)
+                                                    (1-self.beta2) * (grad **2)
 
     
     def save_momentum(self,layer_name, layer):
 
-        for i, param in enumerate(layer.params):
+        for i, grad in enumerate(layer.grads):
             name = f"{layer_name}_{i}"
 
             if name not in self.momentum.keys():
-                self.momentum[name] = (1-self.beta1) * (param)
+                self.momentum[name] = (1-self.beta1) * (grad)
             else:
                 self.momentum[name] = self.beta1 * self.momentum[name] + \
-                                                    (1-self.beta1) * (param)
+                                                    (1-self.beta1) * (grad)
                         

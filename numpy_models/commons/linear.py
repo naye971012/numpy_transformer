@@ -1,4 +1,6 @@
+from typing import Any
 import numpy as np
+import copy
 
 class Linear_np:
     def __init__(self, num_hidden_1, num_hidden_2):

@@ -101,11 +101,12 @@ class CustomDataset:
         self.max_len = make_len
     
     def make_data(self):
+        
         #data = np.arange(10)
         #np.random.shuffle(data)
         
         data = np.array([random.randint(0, 9) for _ in range(self.max_len)])
-        label = np.array([1 if data[(i+1)%10]==(i+1)%10 else 0 for i in range(len(data))])
+        label = np.array([1 if (data[(i+1)%10]==data[i] or data[(i-1)%10]==data[i]) else 0 for i in range(len(data))])
         
         return data,label
     

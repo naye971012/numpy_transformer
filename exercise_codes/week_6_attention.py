@@ -36,7 +36,7 @@ def train(model, dataloader):
             if(len(dataloader)==i):
                 break
         
-        if(epoch>10):
+        if(epoch%10==9):
             plt.xticks(np.arange(10), input_text[0])
             plt.yticks(np.arange(10), input_text[0])
             plt.imshow(att_map[0], cmap='viridis', interpolation='nearest')
@@ -58,7 +58,7 @@ def main():
 
 
 if __name__=="__main__":
-    BATCH_SIZE = 1
+    BATCH_SIZE = 10
     TOTAL_EPOCH = 20
     LR = 1e-4
     main()

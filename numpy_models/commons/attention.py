@@ -1,6 +1,7 @@
 import numpy as np
 import sys
 import os
+import matplotlib.pyplot as plt
 
 ############## this block is just for import moudles ######
 current_path = os.path.dirname(os.path.realpath(__file__))
@@ -190,7 +191,13 @@ if __name__ == "__main__":
     q = np.random.randn(3,5,10)
     kv = np.random.randn(3,7,20)
     
-    output = model(q,kv,kv)
+    output , att_map = model(q,kv,kv)
     print(output.shape)
     
     model.backward(output)
+
+    plt.xticks(np.arange(7), np.arange(7))
+    plt.yticks(np.arange(5), np.arange(5))
+    plt.imshow(att_map[0], cmap='viridis', interpolation='nearest')
+    plt.colorbar()  # 컬러바 추가
+    plt.show()

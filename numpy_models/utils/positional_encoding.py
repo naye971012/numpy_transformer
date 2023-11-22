@@ -51,14 +51,19 @@ class Embedding_with_positional_encoding_np:
             np.array: _description_
         """
         
+        self.grads['dW'] = np.zeros_like(self.params['W'])
+        np.add.at(self.grads['dW'], self.forward_input, d_prev)
+        
+        """
         b, vocab, dim = d_prev.shape
         vocab_len, dim = self.params['W'].shape
         
         expanded_d_prev = np.zeros(shape=(b,vocab_len,dim))
         expanded_d_prev[:,self.forward_input[:]] = d_prev
-
+        
         self.grads['dW'] = np.mean(expanded_d_prev,axis=0)
-
+        """
+        
         return None
     
     def __call__(self,x):

@@ -121,14 +121,46 @@ class Attention_np:
             dK.append(dk)
             dV.append(dv)
 
-        if len(self.Q) == 1:
-            dQ, dK, dV = dQ[0], dK[0], dV[0]
+        #if len(self.Q) == 1:
+        #    dQ, dK, dV = dQ[0], dK[0], dV[0]
 
         dQ = np.array(dQ)
         dK = np.array(dK)
         dV = np.array(dV)
         
-        return dQ, dK, dV
+        
+        #X_Q = [# of batch, query dim, embed dim_xq]
+        #W_Q = [embed dim_xq, embed dim]
+
+        #X_K = [# of batch, key(value) dim, embed dim_xk]
+        #W_K = [embed dim_xk, embed dim]
+
+        #X_V = [# of batch, value dim, embed dim_xv]
+        #W_V = [embed dim_xv, embed dim]
+
+        #Q = [# of batch, query dim, embed dim]
+        #K = [# of batch, value dim, embed dim]
+        #V = [# of batch, value dim, embed dim]
+        
+        #when 3 dim
+        self.grads['dW_Q'] = np.tensordot(self.x_q, dQ, axes=([0, 1], [0, 1]))
+        self.grads['db_Q'] = np.sum(dQ, axis=(0,1) )
+        self.grad_q = np.dot(dQ , self.params['W_Q'].T)
+        #when 3 dim
+        self.grads['dW_K'] = np.tensordot(self.x_k, dK, axes=([0, 1], [0, 1]))
+        self.grads['db_K'] = np.sum(dK, axis=(0,1) )
+        self.grad_k = np.dot(dK , self.params['W_K'].T)
+        #when 3 dim
+        self.grads['dW_V'] = np.tensordot(self.x_v, dV, axes=([0, 1], [0, 1]))
+        self.grads['db_V'] = np.sum(dV, axis=(0,1) )
+        self.grad_v = np.dot(dV , self.params['W_V'].T)        
+        
+        #when q==k==v (self attention)
+        if(np.array_equal(self.x_k,self.x_q)):
+            return self.grad_q + self.grad_k + self.grad_v
+        #when encoder-decoder attention
+        else:
+            return self.grad_q , self.grad_k + self.grad_v
 
     def _bwd(self,i, dy, q, k, v, weights):
         """Actual computation of the gradient of the loss wrt. q, k, and v"""

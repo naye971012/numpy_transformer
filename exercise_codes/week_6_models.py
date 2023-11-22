@@ -25,15 +25,15 @@ class model_with_attention():
         self.optimizer = SGD_np()
         
         # [# of batch, 10] -> [# of batch, 10, 32]
-        self.embedding = Embedding_with_positional_encoding_np(10,32)
+        self.embedding = Embedding_with_positional_encoding_np(10,64)
         
         # [# of batch, 10, 32] -> [# of batch, 10, 16]
         self.norm1 = Layer_Normalization_np()
-        self.attention = Attention_np(32,32,32,16)
+        self.attention = Attention_np(64,64,64,64)
         
-        self.linear_1 = Linear_np(16 , 32)
+        self.linear_1 = Linear_np(64 , 64)
         self.norm2 = Layer_Normalization_np()
-        self.linear_2 = Linear_np(32, output_channel)
+        self.linear_2 = Linear_np(64, output_channel)
         
         self.activation_1 = Relu_np()
         self.activation_2 = Relu_np()
@@ -101,8 +101,12 @@ class CustomDataset:
         self.max_len = make_len
     
     def make_data(self):
+        #data = np.arange(10)
+        #np.random.shuffle(data)
+        
         data = np.array([random.randint(0, 9) for _ in range(self.max_len)])
-        label = np.array([1 if (x + 1) % 10 in data else 0 for x in data])
+        label = np.array([1 if data[(i+1)%10]==(i+1)%10 else 0 for i in range(len(data))])
+        
         return data,label
     
     def __getitem__(self,x):

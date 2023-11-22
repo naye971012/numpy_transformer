@@ -4,17 +4,6 @@ class Layer_Normalization_np:
     def __init__(self, eps:float = 1e-5,):
         #input is [# of batch, feat1, feat2, ...]
         self.eps = eps
-        
-        self.define_grads_and_params()
-
-    def define_grads_and_params(self):
-        """
-        important!!!
-        define self.params and self.grads for optimizer update
-        """
-        #there are no param and grad in layernorm (maybe?)
-        self.params = None
-        self.grads = None
     
     def forward(self, x:np.array, train:bool=True):
         #x.shape = [# of batch, num_features1, num_features2, ...]

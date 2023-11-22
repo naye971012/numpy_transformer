@@ -116,7 +116,7 @@ def main():
 
 if __name__=="__main__":
     
-    TOTAL_EPOCH = 5
+    TOTAL_EPOCH = 2
     LR = 0.001
     BATCH_SIZE = 12
     

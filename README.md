@@ -20,6 +20,7 @@ Here is the current checklist of completed items:
 - Linear Layer
 - CNN (Convolutional Neural Network)
 - RNN (Recurrent Neural Network)
+- Scaled Dot Product Attention
 
 ## Optimizers
 - SGD
@@ -85,7 +86,7 @@ Here is the current checklist of completed items:
 - **Week 5 Exercise**
   - compare w/wo Normalization Layers in terms of converge speed/accuracy
 
-## **Week 6 - Attention(TODO)**
+## **Week 6 - Attention**
 - **Topic**
   - Attention
 - **Week 6 Exercise**

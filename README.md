@@ -1,4 +1,4 @@
-# numpy_transformer
+# numpy_transformer - 1
 numpy implementation of pytorch deep learning models including Transformer \
 6 weeks basic study curriculum with exercise code! (check branch)
 

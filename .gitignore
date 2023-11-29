@@ -3,3 +3,4 @@ __pycache__/
 dummy_codes.*
 *.txt
 data/*
+.idea

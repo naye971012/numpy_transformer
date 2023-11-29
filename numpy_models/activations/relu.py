@@ -14,7 +14,7 @@ class Relu_np():
             x (np.array): [batch, ... ]
 
         Returns:
-            np.array: [batch, ... ] 
+            np.array: [batch, ... ]
         """
         self.d_zeros = x<0
         x[self.d_zeros]=0

@@ -20,48 +20,49 @@ from numpy_models.activations.relu import Relu_np
 from numpy_models.normalization.layernorm import Layer_Normalization_np
 
 class model_with_attention():
-    def __init__(self, input_channel=10, output_channel=1) -> None:
+    def __init__(self, input_channel=10, output_channel=10) -> None:
         
         self.optimizer = SGD_np()
         
         # [# of batch, 10] -> [# of batch, 10, 32]
-        self.embedding = Embedding_with_positional_encoding_np(10,64)
+        self.embedding = Embedding_with_positional_encoding_np(10,128)
         
         # [# of batch, 10, 32] -> [# of batch, 10, 16]
         self.norm1 = Layer_Normalization_np()
-        self.attention = Attention_np(64,64,64,64)
+        self.attention = Attention_np(128,128,128,64)
         
-        self.linear_1 = Linear_np(64 , 64)
+        self.linear_1 = Linear_np(64 , 256)
         self.norm2 = Layer_Normalization_np()
-        self.linear_2 = Linear_np(64, output_channel)
+        self.linear_2 = Linear_np(256, output_channel)
         
         self.activation_1 = Relu_np()
         self.activation_2 = Relu_np()
-        self.sigmoid = Sigmoid_np()
+        self.softmax = softmax_np()
         
         self.flatten = Flatten_np()
         
-        self.criterion = Binary_Cross_Entropy_np()
+        self.criterion = Cross_Entropy_np()
         
     def forward(self,x):   
         #x[# of batch, 10]
         
         #x[# of batch, 10, 32]
         x = self.embedding(x)
-        x = self.norm1(x)
+        
         #x[# of batch, 10 16]
         x, att_map = self.attention(x,x,x) #query key value
+        x = self.norm1(x)
         x = self.activation_1(x)
         
         x = self.linear_1(x)
         x = self.norm2(x)
         x = self.activation_2(x)
         
-        x = self.linear_2(x) #[# of batch, 10, 1]
-        x = self.sigmoid(x)
+        x = self.linear_2(x) #[# of batch, 10, 10]
+        x = self.softmax(x)
         
         # [# of batch, 10]
-        x = self.flatten(x)
+        #x = self.flatten(x)
         
         return x, att_map
     
@@ -71,9 +72,9 @@ class model_with_attention():
     
     def backward(self,d_prev=1):
         d_prev = self.criterion.backward(d_prev)
-        d_prev = self.flatten.backward(d_prev)
+        #d_prev = self.flatten.backward(d_prev)
         
-        d_prev = self.sigmoid.backward(d_prev)
+        d_prev = self.softmax.backward(d_prev)
         d_prev = self.linear_2.backward(d_prev)
         
         d_prev = self.activation_2.backward(d_prev)
@@ -81,8 +82,8 @@ class model_with_attention():
         d_prev = self.linear_1.backward(d_prev)
         
         d_prev = self.activation_1.backward(d_prev)
-        d_prev = self.attention.backward(d_prev)
         d_prev = self.norm1.backward(d_prev)
+        d_prev = self.attention.backward(d_prev)
         
         d_prev = self.embedding.backward(d_prev)
         return d_prev
@@ -102,11 +103,12 @@ class CustomDataset:
     
     def make_data(self):
         
-        #data = np.arange(10)
-        #np.random.shuffle(data)
+        data = np.arange(10)
+        np.random.shuffle(data)
         
-        data = np.array([random.randint(0, 9) for _ in range(self.max_len)])
-        label = np.array([1 if (data[(i+1)%10]==data[i] or data[(i-1)%10]==data[i]) else 0 for i in range(len(data))])
+        #data = np.array([random.randint(0, 9) for _ in range(self.max_len)])
+        #label = np.array([1 if (data[(i+1)%10]==data[i] or data[(i-1)%10]==data[i]) else 0 for i in range(len(data))])
+        label = np.array([ data[i] for i in range(len(data)) ])
         
         return data,label
     

@@ -31,6 +31,8 @@ from activations.softmax import softmax_np
 
 #Concat[AttentionOutput] = [# of batch, query dim, embed dim * N ]
 
+INF_MINUS = -100000
+
 class Attention_np:
     """
     attention layer which get query,key,value as input \
@@ -41,10 +43,13 @@ class Attention_np:
                  key_embed_dim:int, 
                  value_embed_dim:int, 
                  attention_embed_dim:int = 256,
-                 scale = True
+                 is_mask:bool = False, #used when masked self attention
+                 scale:bool = True
                  ) -> None:
         self.params = dict()
         self.grads = dict()
+        
+        self.is_mask = is_mask
         
         self.scale = scale
         self.softmax = softmax_np()
@@ -95,7 +100,13 @@ class Attention_np:
         
         """Actual computation of forward pass"""
         scale = 1 / np.sqrt(self.Q.shape[-1]) if self.scale else 1
-        self.QK = self.Q @ self.K.swapaxes(-2, -1) * scale  # attention scores
+        
+        qk_ones =  np.ones((self.Q.shape[-2],self.V.shape[-2]))
+        #self.mask = qk_ones + np.triu(INF_MINUS *qk_ones,1) if self.is_mask else qk_ones
+        self.mask = np.triu(INF_MINUS *qk_ones,1) if self.is_mask else np.zeros_like(qk_ones)
+
+        
+        self.QK = self.Q @ self.K.swapaxes(-2, -1) * scale + self.mask  # attention scores
         self.softQK = self.softmax.forward(self.QK)  # attention weights
         self.VsoftQK = self.softQK @ self.V
         
@@ -176,6 +187,8 @@ class Attention_np:
         sum_grad = np.sum(grad, axis=-1, keepdims=True)
         dScores = grad - self.softQK[i] * sum_grad
         
+        #dScores *= self.mask
+        
         dQ = dScores @ k * scale
         dK = dScores.swapaxes(-2, -1) @ q * scale
         return dQ, dK, dV
@@ -187,9 +200,9 @@ class Attention_np:
 
 #test forward/backward dimension
 if __name__ == "__main__":
-    model = Attention_np(10,20,20,40)
-    q = np.random.randn(3,5,10)
-    kv = np.random.randn(3,7,20)
+    model = Attention_np(10,10,10,40,is_mask=True)
+    q = np.random.randn(3,7,10)
+    kv = np.random.randn(3,7,10)
     
     output , att_map = model(q,kv,kv)
     print(output.shape)
@@ -197,7 +210,7 @@ if __name__ == "__main__":
     model.backward(output)
 
     plt.xticks(np.arange(7), np.arange(7))
-    plt.yticks(np.arange(5), np.arange(5))
+    plt.yticks(np.arange(7), np.arange(7))
     plt.imshow(att_map[0], cmap='viridis', interpolation='nearest')
     plt.colorbar()  # 컬러바 추가
     plt.show()

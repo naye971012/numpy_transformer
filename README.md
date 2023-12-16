@@ -2,6 +2,8 @@
 numpy implementation of pytorch deep learning models including Transformer \
 6 weeks basic study curriculum with exercise code! (check branch)
 
+2023-2 인공지능 연합동아리 프로메테우스 4기 강의/실습 자료
+
 # Completed Checklist
 
 Here is the current checklist of completed items:

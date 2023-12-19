@@ -3,20 +3,36 @@ import numpy as np
 import copy
 
 class Linear_np:
+    """
+    Linear layer with numpy
+    """
     def __init__(self, num_hidden_1, num_hidden_2):
         
         self.params = dict()
         self.grads = dict()
         
-        limit = np.sqrt(2 / float(num_hidden_1))
-        self.params['W'] = np.random.normal(0.0, limit, size=(num_hidden_1, num_hidden_2))
-        self.params['b'] = np.zeros(num_hidden_2)
+        self.output = None
+        self.grad = None
+        
+        self.hid1 = num_hidden_1
+        self.hid2 = num_hidden_2
+        
+        self.init_params()
+    
+    def init_params(self):
+        """
+        init params.
+        int linear layer, it has 'W' and 'b'
+        
+        'W': [num_hidden_1, num_hidden_2]
+        'b': [num_hidden_2]
+        """
+        limit = np.sqrt(2 / float(self.hid1))
+        self.params['W'] = np.random.normal(0.0, limit, size=(self.hid1, self.hid2))
+        self.params['b'] = np.zeros(self.hid2)
 
         self.grads['dW'] = None
         self.grads['db'] = None
-
-        self.output = None
-        self.grad = None
         
     def forward(self, x):
         

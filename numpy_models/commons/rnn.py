@@ -16,10 +16,9 @@ from numpy_models.activations.softmax import softmax_np
 """
 
 
-
 class RNN_np:
     """
-    Recurrent neural network implementation.
+    Recurrent neural network implementation with numpy
     """
     def __init__(self, input_dim, output_dim, hidden_dim):
         """

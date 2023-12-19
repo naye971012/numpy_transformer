@@ -7,7 +7,7 @@ from .vocab import Vocabulary
 
 class Word_tokenizer_np:
     """
-    simple tokenizer using vocab
+    simple tokenizer using custom vocabulary
     """
     def __init__(self):
         self.vocab = Vocabulary()
@@ -38,17 +38,30 @@ class Word_tokenizer_np:
     
     def clean_text(self, sentence:str) -> str:
         """
-        convert all text into lowercase and remain only alphabat (for vocab hit ratio)
+        convert all text into lowercase and remain only alphabat and number (for increase vocab hit ratio)
         """
         sentence = sentence.lower()
-        sentence = re.sub(r'[^a-z ]', '', sentence)
+        sentence = re.sub(r'[^a-z0-9 ]', '', sentence)
         return sentence
     
-    def convert_one_ids_to_tokens(self, sentence: List[int]) -> str:
+    def decode(self, sentence: List[int]) -> str:
+        """
+        convert id array into original sentence
+        """
         output = ""
         for word in sentence:
             output = output + self.vocab.idx2word[word] + " "
         return output
+    
+    def decode_batch(self, batch: List[List[int]]) -> List[str]:
+        """
+        convert batch id array into original sentence
+        """
+        batch_output = []
+        for sentence in batch:
+            sentence_output = self.decode(sentence)
+            batch_output.append(sentence_output)
+        return batch_output
     
     def convert_one_tokens_to_ids(self, sentence: List[str]) -> List[int]:
         """
@@ -65,13 +78,13 @@ class Word_tokenizer_np:
             output.append(self.vocab(word))
         return output
     
-    def convert_tokens_to_ids(self, input_list: List[str], padding=True, max_length=20) -> np.array:
+    def convert_tokens_to_ids(self, input_list: List[List[str]], padding=True, max_length=20) -> np.array:
         """
         input: [ [i, am, apple] , [i, love, apple] ]
         output: [ [1, 3, 5] , [1, 6, 5] ]
 
         Args:
-            input_list (List[str]): list of tokenized token list
+            input_list (List[List[str]]): list of tokenized token list
 
         Returns:
             np.array(List[List[int]]): list of id list
@@ -83,7 +96,7 @@ class Word_tokenizer_np:
             #when padding, make length==max_length padding blank with zero
             if padding:
                 if len(list_ids) < max_length:
-                    list_ids += [0] * (max_length - len(list_ids))
+                    list_ids += [self.vocab('<pad>')] * (max_length - len(list_ids))
                 else:
                     list_ids = list_ids[:max_length]
                     

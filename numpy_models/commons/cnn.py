@@ -5,7 +5,9 @@ from typing import Tuple, Optional
 #https://github.com/SkalskiP/ILearnDeepLearning.py/blob/master/01_mysteries_of_neural_networks/06_numpy_convolutional_neural_net/src/layers/convolutional.py
 
 class Conv2d_np:
-
+    """
+    conv2d layer with numpy
+    """
     def __init__(
         self, 
         in_c: int, 
@@ -202,6 +204,7 @@ class Conv2d_np:
         return self.forward(x)
 
 
+#for check dim
 if __name__ == "__main__":
     layer = Conv2d_np(1,3,(3,3))
     

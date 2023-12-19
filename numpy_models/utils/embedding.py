@@ -1,8 +1,19 @@
 import numpy as np
 
 class Embedding_np:
-    def __init__(self, num_emb, num_dim) -> None:
+    """
+    embedding layer implemented with numpy
+    same functionality to torch.nn.embedding
+    """
+    
+    def __init__(self, num_emb:int , num_dim:int ) -> None:
+        """
+        Args:
+            num_emb (int): the number of the vocab size
+            num_dim (int): embedding dimension
+        """
         
+        #save params and gradient for layer update
         self.params = dict()
         self.grads = dict()
         
@@ -10,13 +21,24 @@ class Embedding_np:
         self.num_dim = num_dim
         
         self.forward_input = None
+
+        self.init_params()
         
-        limit = np.sqrt(2 / float(num_dim))
-        self.params['W'] = np.random.normal(0.0, limit, size=(num_emb,num_dim))
+    def init_params(self) -> None:
+        """
+        initalizate params
+        in embedding layer, it has 'W' weight tensor
+        
+        'W' dim = [# of vocab, embedding dimension]
+        """
+        
+        limit = np.sqrt(2 / float(self.num_dim))
+        self.params['W'] = np.random.normal(0.0, limit, size=(self.num_emb,self.num_dim))
         
     def forward(self,x:np.array) -> np.array:
         """
-
+        forward process of embedding layer
+        
         Args:
             x (np.array[int]): [# of batch, # of vocab(int) ]
 
@@ -29,35 +51,29 @@ class Embedding_np:
         
         return output
         
-    def backward(self,d_prev:np.array) -> np.array:
+    def backward(self,d_prev:np.array) -> None:
         """
-
-        self.W = [# of embedding , embedding_dim]
+        backward process of embedding layer
         
         Args:
             d_prev (np.array): [# of batch, # of vocab, embedding_dim]
 
         Returns:
-            np.array: _description_
+            None(it should be first layer of the model)
         """
-        
-        #b, vocab, dim = d_prev.shape
-        #vocab_len, dim = self.W.shape
         
         self.grads['dW'] = np.zeros_like(self.params['W'])
         np.add.at(self.grads['dW'], self.forward_input, d_prev)
-        
-        #expanded_d_prev = np.zeros(shape=(b,vocab_len,dim))
-        #expanded_d_prev[:,self.forward_input[:]] = d_prev
-        #self.dW = np.mean(expanded_d_prev,axis=0)
 
         return None
     
     def __call__(self,x):
         return self.forward(x)
 
+
+#check dimension
 if __name__=="__main__":
     model = Embedding_np(10,20)
-    x = np.random.randint(0,9, size=(1,5))
+    x = np.random.randint(0,9, size=(1,20))
     output = model(x)
     model.backward(output)

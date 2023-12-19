@@ -59,6 +59,13 @@ class Attention_np:
         self.v_dim = value_embed_dim
         self.embed_dim = attention_embed_dim
 
+        self.init_params()
+    
+    def init_params(self):
+        """
+        init params
+        it has 'W', 'b' in each 'Q,K,V'
+        """
         limit = np.sqrt(2 / float(self.q_dim))
         self.params['W_Q'] = np.random.normal(0.0, limit, size=( self.q_dim, self.embed_dim))
         self.params['b_Q'] = np.zeros(shape = ( self.embed_dim , ) )

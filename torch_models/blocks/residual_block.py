@@ -1,1 +1,0 @@
-#it is same as numpy residual block okay

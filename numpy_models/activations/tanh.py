@@ -4,44 +4,38 @@ import numpy as np
 
 class Tanh_np:
     """
-    Class for the Hyperbolic tangent activation function.
-    Applies the hyperbolic tangent function:
-    :math:`Tanh(x) = \frac{e^x - e^{-x}}{e^x + e^{-x}}`  
+    activatino tanh with np
     """
     def __init__(self):
-        self.type = 'Tanh'
+        self.out = None
 
-    def forward(self, Z):
+    def forward(self, x:np.array) -> np.array:
         """
-        Computes the forward propagation.
-        Parameters
-        ----------
-        Z : numpy.array
-            Input.
-        Returns
-        -------
-        A : numpy.array
-            Output.
-        """
-        self.A = np.tanh(Z)
+        forward process of tanh
+        
+        Args:
+            x (np.array): [batch, ... ]
 
-        return self.A
-
-    def backward(self, dA):
+        Returns:
+            np.array: [batch, ... ]
         """
-        Computes the backward propagation.
-        Parameters
-        ----------
-        dA : numpy.array
-            Gradients of the activation function output.
-        Returns
-        -------
-        dZ : numpy.array
-            Gradients of the activation function input.
-        """
-        dZ = dA * (1 - np.power(self.A, 2))
+        self.out = np.tanh(x)
 
-        return dZ
+        return self.out
+
+    def backward(self, d_prev:np.array) -> np.array:
+        """
+        backward process of tanh
+        
+        Args:
+            d_prev (np.array): [batch, ... ]
+
+        Returns:
+            np.array: [batch, ... ]
+        """
+        d_prev = d_prev * (1 - np.power(self.out, 2))
+
+        return d_prev
     
     def __call__(self,x):
         return self.forward(x)

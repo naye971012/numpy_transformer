@@ -1,22 +1,23 @@
 import numpy as np
 
 class Binary_Cross_Entropy_np():
-    def __init__(self,eps=1e-10) -> None:
+    def __init__(self,eps: int=1e-10) -> None:
         self.eps = eps
         self.pred = None # save output
         self.target = None # save target
         self.grad = None # save gradient
     
-    def forward(self, pred, target ):
+    def forward(self, pred:np.array, target:np.array ) -> np.array:
         """
         assert pred is prob, not logit!!!
         ( prob = [0,1] , log = [-inf,+inf] )
         
         Args:
-            x (Tensor): [batch, ... ]
+            pred (np.array): [batch, 1]
+            target (np.array): [batch]
 
         Returns:
-            Tensor: Scaler 
+            np.array: Scaler 
         """
 
         output = -1 * ( target * np.log( pred + self.eps ) + (1-target) * np.log( 1-pred + self.eps ))
@@ -25,11 +26,10 @@ class Binary_Cross_Entropy_np():
         self.target = target
         return np.mean(output, axis=None)
     
-    def backward(self, d_prev=1):
+    def backward(self, d_prev:int=1) -> np.array:
         """
-        backward:
-            output -> d_sigmoid -> grad
-        
+        Returns:
+            np.array: same as pred(input).shape
         """
 
         #divide grad by [# of class] since we apply np.mean in forward

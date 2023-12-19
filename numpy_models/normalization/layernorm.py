@@ -1,14 +1,33 @@
 import numpy as np
 
 class Layer_Normalization_np:
+    """
+    implementation of layer normalization with numpy
+    """
     def __init__(self, eps:float = 1e-5,):
-        #input is [# of batch, feat1, feat2, ...]
+        """
+        Args:
+            eps (float, optional): param of normalization. Defaults to 1e-5.
+        """
         self.eps = eps
     
-    def forward(self, x:np.array, train:bool=True):
+    def forward(self, x:np.array, train:bool=True) -> np.array:
+        """
+        forward process of layer normalization
+
+        Args:
+            x (np.array): [# of batch, ... ]
+            train (bool, optional): flag of train/inference. Defaults to True.
+
+        Returns:
+            np.array: [# of batch, ... ]
+        """
+        
         #x.shape = [# of batch, num_features1, num_features2, ...]
         original_shape = x.shape
         self.num_batch = x.shape[0] # [# of batch]
+        
+        #make flatten x for easy normalization
         x = x.reshape(self.num_batch,-1) #flatten, [# of batch, -1]
         self.x = x
         
@@ -24,9 +43,18 @@ class Layer_Normalization_np:
         self.standard_x = self.x_minus_mean / self.feature_std #[# of batch, # of feat]
 
         output = self.standard_x.reshape(original_shape) #restore flatten d_prev
-        return output #no dimension change(mayebe?)
+        return output #no dimension change
         
-    def backward(self, d_prev):
+    def backward(self, d_prev:np.array) -> np.array:
+        """
+        backward process of layer normalization
+
+        Args:
+            d_prev (np.array): [# of batch, ... ]
+
+        Returns:
+            np.array: [# of batch, ... ]
+        """
         #d_prev.shape = [# of batch, feat1, feat2, ...]
         original_shape = d_prev.shape
         d_prev = d_prev.reshape(self.num_batch,-1) #flatten, [# of batch, -1]
@@ -46,6 +74,7 @@ class Layer_Normalization_np:
     def __call__(self, x):
         return self.forward(x)
 
+#for check dimension
 if __name__=="__main__":
     # for check dimension
     model = Layer_Normalization_np()

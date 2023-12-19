@@ -1,15 +1,21 @@
 import numpy as np
 
 class Dropout_np:
+    """
+    dropout layer implemented with numpy
+    """
+    
     def __init__(self, prob:float) -> None:
+        #dropout percent
         assert (prob>=0 and prob<1)
-        
         self.drop_prob = prob
+        
         self.drop_mask = None
     
     def forward(self,x:np.array) -> np.array:
         """
-
+        forward process of dropout layer
+        
         Args:
             x (np.array): [# of batch, ... ]
 
@@ -25,7 +31,8 @@ class Dropout_np:
     
     def backward(self,d_prev:np.array) -> np.array:
         """
-
+        backward process of dropout layer
+        
         Args:
             d_prev (np.array): [# of batch, ... ]
 

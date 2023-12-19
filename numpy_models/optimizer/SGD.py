@@ -1,16 +1,16 @@
 import numpy as np
 
 class SGD_np:
+    """
+    implementation of optimizer SGD in numpy
+    """
     def __init__(self) -> None:
         """
-        
         W(t+1) = W(t) - lr * cost
-        
         """
         
     def update_grad(self, layer_name:str, layer, LR:float):
         """
-
         Args:
             layer_name (str): _description_
             layer (_type_): layer(ex.)

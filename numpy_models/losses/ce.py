@@ -11,15 +11,16 @@ class Cross_Entropy_np():
         """
         assert pred is prob, not logit!!!
         ( prob = [0,1] , log = [-inf,+inf] )
-        
-        Args:
-            pred: [# of batch, # of class]
-            target: [# of batch]
-
-        Returns:
-            Tensor: Scaler 
         """
         if pred.ndim==2:
+            """
+            Args:
+                pred: [# of batch, # of class]
+                target: [# of batch]
+
+            Returns:
+                Tensor: Scaler 
+            """
             batch_size, num_class = pred.shape[0], pred.shape[1]
             target_one_hot = np.zeros((batch_size, num_class))
             target_one_hot[np.arange(batch_size), target] = 1
@@ -54,11 +55,10 @@ class Cross_Entropy_np():
     
     def backward(self, d_prev=1):
         """
-        backward:
-            output -> d_sigmoid -> grad
-        
+        Returns:
+            np.array: same as pred(input).shape
         """
-
+        
         #divide grad by [# of class] since we apply np.mean in forward
         grad = (self.pred - self.target) / ( (self.pred ) * (1 - self.pred ) + self.eps ) / self.target.shape[-1]
         

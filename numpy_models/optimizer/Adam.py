@@ -1,11 +1,9 @@
-"""
-change algorithm of adam for code visability    
-
-"""
-
 import numpy as np
 
 class Adam_np:
+    """
+    implementation of optimizer Adam in numpy
+    """
     def __init__(self, alpha: float = 0.001,
                        beta1: float = 0.99,
                        beta2: float = 0.999,
@@ -33,17 +31,19 @@ class Adam_np:
     def step(self):
         self.t = self.t + 1
     
-    def update_grad(self, layer_name:str, layer, LR:float):
+    def update_grad(self, layer_name:str, layer, LR:float) -> None:
         
         """
         Args:
             layer_name (str): _description_
-            layer (_type_): layer(ex.)
+            layer (_type_): layer
             LR (float): Learning rate
         """
+        #save velocity/momentum
         self.save_velocity(layer_name,layer)
         self.save_momentum(layer_name,layer)
 
+        #update layer gradient
         for param_key, grad_key in zip( sorted(layer.params.keys()), sorted(layer.grads.keys()) ):
             name = (layer_name + grad_key)
 
@@ -52,7 +52,9 @@ class Adam_np:
             layer.params[param_key] = layer.params[param_key] - LR * momentum_hat / (np.sqrt(velocity_hat + self.eps) )
 
     def save_velocity(self,layer_name, layer):
-        
+        """
+        save velocity of current layer
+        """
         for param_key, grad_key in zip( sorted(layer.params.keys()), sorted(layer.grads.keys()) ):
             name = (layer_name + grad_key)
             
@@ -64,7 +66,9 @@ class Adam_np:
 
     
     def save_momentum(self,layer_name, layer):
-        
+        """
+        save momentum of current layer
+        """
         for param_key, grad_key in zip( sorted(layer.params.keys()), sorted(layer.grads.keys()) ):
             name = (layer_name + grad_key)
 

@@ -1,17 +1,40 @@
 import numpy as np
 
 def positional_encoding(max_position:int, d_model:int, min_freq:int=1e-4) -> np.array:
-        
+    """
+    positional encoding implemented with sin/cos
+    witch is same as transformer postional encoding
+    
+    Args:
+        max_position (int): maximum input size
+        d_model (int): dimension of model(embedding)
+        min_freq (int, optional): Defaults to 1e-4.
+
+    Returns:
+        np.array: [max position, d_model]
+    """
     position = np.arange(max_position) # [max position]
     freqs = min_freq**(2*(np.arange(d_model)//2)/d_model) # [d_model]
     pos_enc = position.reshape(-1,1)*freqs.reshape(1,-1) #[max_position , 1] * [1, d_model] = [ max position , d_model ]
+    
     pos_enc[:, ::2] = np.cos(pos_enc[:, ::2])
     pos_enc[:, 1::2] = np.sin(pos_enc[:, 1::2])
   
     return pos_enc
 
 class Embedding_with_positional_encoding_np:
+    """
+    embedding layer with positional encoding implemented with numpy
+    """
+    
     def __init__(self, num_emb:int, num_dim:int) -> None:
+        """
+        Args:
+            num_emb (int): the number of the vocab size
+            num_dim (int): embedding dimension
+        """
+        
+        #save params and gradient for layer update
         self.params = dict()
         self.grads = dict()
         
@@ -20,13 +43,23 @@ class Embedding_with_positional_encoding_np:
         
         self.forward_input = None
         self.pos_enc = positional_encoding(num_emb,num_dim)
+        self.init_params()
         
-        limit = np.sqrt(2 / float(num_dim))
-        self.params['W'] = np.random.normal(0.0, limit, size=(num_emb,num_dim))
+    def init_params(self) -> None:
+        """
+        initalizate params
+        in embedding layer, it has 'W' weight tensor
+        
+        'W' dim = [# of vocab, embedding dimension]
+        """
+        
+        limit = np.sqrt(2 / float(self.num_dim))
+        self.params['W'] = np.random.normal(0.0, limit, size=(self.num_emb,self.num_dim))
 
     def forward(self,x:np.array) -> np.array:
         """
-
+        forward process of embedding layer
+        
         Args:
             x (np.array[int]): [# of batch, # of vocab(int) ]
 
@@ -41,34 +74,25 @@ class Embedding_with_positional_encoding_np:
         
     def backward(self,d_prev:np.array) -> np.array:
         """
-
-        self.W = [# of embedding , embedding_dim]
+        backward process of embedding layer
         
         Args:
             d_prev (np.array): [# of batch, # of vocab, embedding_dim]
 
         Returns:
-            np.array: _description_
+            None(it should be first layer of the model)
         """
         
         self.grads['dW'] = np.zeros_like(self.params['W'])
         np.add.at(self.grads['dW'], self.forward_input, d_prev)
-        
-        """
-        b, vocab, dim = d_prev.shape
-        vocab_len, dim = self.params['W'].shape
-        
-        expanded_d_prev = np.zeros(shape=(b,vocab_len,dim))
-        expanded_d_prev[:,self.forward_input[:]] = d_prev
-        
-        self.grads['dW'] = np.mean(expanded_d_prev,axis=0)
-        """
-        
+
         return None
     
     def __call__(self,x):
         return self.forward(x)
 
+
+#check dimension & visualize
 if __name__=="__main__":
     
     model = Embedding_with_positional_encoding_np(10,20)

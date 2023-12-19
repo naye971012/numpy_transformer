@@ -1,18 +1,23 @@
 import numpy as np
 
 class Flatten_np:
+    """
+    flatting layer implemented with numpy
+    same functionality to nn.flatten
+    """
+    
     def __init__(self) -> None:
         self.origin_shape = None
     
     def forward(self,x:np.array) -> np.array:
         """
-
+        forward process of flatten layer
+        
         Args:
-            x (np.array): example) [# of batch, a, b, c]
+            x (np.array):  [# of batch, a, ..., b]
 
         Returns:
-            np.array: [# of batch, a*b*c ]
-            
+            np.array: [# of batch, A ]
         """
         
         self.origin_shape = np.shape(x)
@@ -22,12 +27,13 @@ class Flatten_np:
     
     def backward(self,d_prev:np.array) -> np.array:
         """
-
+        backward process of flatten layer
+        
         Args:
-            x (np.array): example) [# of batch, a*b*c]
+            x (np.array):  [# of batch, A]
 
         Returns:
-            np.array: [# of batch, a, b, c ]
+            np.array: [# of batch, a, ..., b]
         """
 
         d_prev = d_prev.reshape(self.origin_shape)
@@ -38,6 +44,7 @@ class Flatten_np:
         return self.forward(x)
 
 
+#for check dimension
 if __name__=="__main__":
     flatten_layer = Flatten_np()
     x = np.random.rand(2,5,10)

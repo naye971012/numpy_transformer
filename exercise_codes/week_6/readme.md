@@ -26,8 +26,8 @@ label = np.array([ i+1 if data[i]==i else 0 for i in range(len(data)) ])
 
 - model without mask example
 
-![week_6_w/o_mask](../../images/week_6_output_1.png)
+![week_6_output_1](https://github.com/naye971012/numpy_transformer/assets/74105909/22de0ac7-f63c-44b1-9578-9d795bd8a1b1)
 
 - model with mask example
 
-![week_6_w/_mask](../../images/week_6_output_2.png)
+![week_6_output_2](https://github.com/naye971012/numpy_transformer/assets/74105909/54556d53-2feb-42a4-a946-2f7057f84fad)

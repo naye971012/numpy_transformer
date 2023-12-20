@@ -18,9 +18,9 @@
 ## Excepted output
 
 - before training
-![week_4_before_training](../../images/week_4_output_1.png)
+![week_4_output_1](https://github.com/naye971012/numpy_transformer/assets/74105909/ba60f56c-d88d-446f-9803-38b2fe630730)
 
 - after training 1 epoch
-![week_4_after_training](../../images/week_4_output_2.png)
+![week_4_output_2](https://github.com/naye971012/numpy_transformer/assets/74105909/6c20183d-c428-4faf-96b8-fee97e23af6b)
 
 - since model is very small, it doesn't work well

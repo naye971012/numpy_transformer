@@ -24,12 +24,12 @@
 </br>
 
 - model without normalization
-![week_5_w/o_norm](../../images/week_5_output_1.png)
+![week_5_output_1](https://github.com/naye971012/numpy_transformer/assets/74105909/caf39415-f93a-4415-917c-3e297565329f)
 
 - model with layer normalization
-![week_4_w/_layernorm](../../images/week_5_output_2.png)
+![week_5_output_2](https://github.com/naye971012/numpy_transformer/assets/74105909/e1be1942-5895-47ee-a2eb-0e8ffed34b09)
 
 - model with batch normalization
-![week_4_w/_batchnorm](../../images/week_5_output_3.png)
+![week_5_output_3](https://github.com/naye971012/numpy_transformer/assets/74105909/50ebeeb2-a187-49ea-9f3a-f38c23691605)
 
 - with normalization, model converge fast and well even learning rate is very high(0.1)

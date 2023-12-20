@@ -15,4 +15,4 @@
 
 ## Excepted output
 
-![week_1_output](https://github.com/naye971012/numpy_transformer/blob/main_code-refactored/images/week_1_output.png?raw=true)
+![week_1_output](https://github.com/naye971012/numpy_transformer/assets/74105909/76385e9a-f546-4ccb-92ba-37d2530d3e62)

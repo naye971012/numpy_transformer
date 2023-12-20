@@ -20,8 +20,9 @@
 ## Excepted output
 
 - MLP model
-![week_2_output1](../../images/week_2_output_1.png)
+![week_2_output_1](https://github.com/naye971012/numpy_transformer/assets/74105909/8ee39f62-9cc6-467e-b9f9-4102981f9178)
+
 - CNN model
-![week_2_output2](../../images/week_2_output_2.png)
+![week_2_output_2](https://github.com/naye971012/numpy_transformer/assets/74105909/432e4032-d1bc-4180-9d4c-ae37fc9aebca)
 
 - you can see cnn models have better accuracy than mlp models

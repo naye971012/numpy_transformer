@@ -55,5 +55,6 @@
 <details>
   <summary> description file example </summary>
 
-  ![exercise_example](../images/exercise_example.png)
+  ![exercise_example](https://github.com/naye971012/numpy_transformer/assets/74105909/d78da2df-b736-4978-84ed-c4fc68dd9815)
+
 </details>

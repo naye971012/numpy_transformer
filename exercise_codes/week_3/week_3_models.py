@@ -11,25 +11,14 @@ parent_path = os.path.dirname(current_path)
 sys.path.append(parent_path)
 ###########################################################
 
-from torch_models.activations.relu import Relu_th
-from numpy_models.activations.relu import Relu_np
+from codes.fixed.relu import Relu_np
+from codes.fixed.sigmoid import Sigmoid_np
+from codes.fixed.linear import Linear_np
+from codes.fixed.ce import Cross_Entropy_np
 
-from torch_models.activations.sigmoid import Sigmoid_th
-from numpy_models.activations.sigmoid import Sigmoid_np
-
-from torch_models.losses.binary_ce import Binary_Cross_Entropy_th
-from numpy_models.losses.binary_ce import Binary_Cross_Entropy_np
-
-from torch_models.commons.linear import Linear_th
-from numpy_models.commons.linear import Linear_np
-
-from numpy_models.losses.ce import Cross_Entropy_np
-
-from numpy_models.commons.cnn import Conv2d_np
-
-from numpy_models.optimizer.SGD_momentum import SGD_momentum_np
-from numpy_models.optimizer.SGD import SGD_np
-from numpy_models.optimizer.Adam import Adam_np
+from codes.SGD_momentum import SGD_momentum_np
+from codes.SGD import SGD_np
+from codes.Adam import Adam_np
 
 class model_Adam_np():
     def __init__(self, input_channel=28*28, output_channel=10) -> None:

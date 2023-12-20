@@ -10,7 +10,7 @@ parent_path = os.path.dirname(current_path)
 sys.path.append(parent_path)
 ###########################################################
 
-from week_6_models import *
+from exercise_codes.week_6.week_6_models import *
 
 def train(model, dataloader):
     

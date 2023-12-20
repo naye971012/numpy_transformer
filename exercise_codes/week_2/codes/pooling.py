@@ -110,9 +110,12 @@ class MaxPooling2D_np:
                 w_start = j * self.stride
                 w_end = w_start + self.pool_w
                 
-                d_output[: ,:, h_start:h_end , w_start:w_end] = \
-                                d_prev[:, :, i:i+1, j:j+1] * self.output_index[: ,:, h_start:h_end , w_start:w_end]
-        
+                ############# edit here #############
+                
+                d_output[: ,:, h_start:h_end , w_start:w_end] = None
+                
+                #####################################
+                
         return d_output
 
     def __call__(self, x:np.array) -> np.array:

@@ -47,9 +47,10 @@ class Adam_np:
         for param_key, grad_key in zip( sorted(layer.params.keys()), sorted(layer.grads.keys()) ):
             name = (layer_name + grad_key)
 
-            momentum_hat = self.momentum[name] / (1 - (self.beta1 ** self.t) )
-            velocity_hat = self.velocity[name] / (1 - (self.beta2 ** self.t) )
-            layer.params[param_key] = layer.params[param_key] - LR * momentum_hat / (np.sqrt(velocity_hat + self.eps) )
+            #################### edit here ####################
+            
+            pass
+            ###################################################
 
     def save_velocity(self,layer_name, layer):
         """
@@ -58,11 +59,10 @@ class Adam_np:
         for param_key, grad_key in zip( sorted(layer.params.keys()), sorted(layer.grads.keys()) ):
             name = (layer_name + grad_key)
             
-            if name not in self.velocity.keys():
-                self.velocity[name] = (1-self.beta2) * (layer.grads[grad_key] **2)
-            else:
-                self.velocity[name] = self.beta2 * self.velocity[name] + \
-                                                    (1-self.beta2) * (layer.grads[grad_key] **2)
+            #################### edit here ####################
+            
+            pass
+            ###################################################
 
     
     def save_momentum(self,layer_name, layer):
@@ -72,9 +72,8 @@ class Adam_np:
         for param_key, grad_key in zip( sorted(layer.params.keys()), sorted(layer.grads.keys()) ):
             name = (layer_name + grad_key)
 
-            if name not in self.momentum.keys():
-                self.momentum[name] = (1-self.beta1) * (layer.grads[grad_key])
-            else:
-                self.momentum[name] = self.beta1 * self.momentum[name] + \
-                                                    (1-self.beta1) * (layer.grads[grad_key])
+            #################### edit here ####################
+            
+            pass
+            ###################################################
                         

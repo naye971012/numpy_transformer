@@ -26,9 +26,11 @@ class SGD_momentum_np:
         self.save_velocity(layer_name,layer)
         
         #update gradient
+        #################### edit here ####################
         for param_key, grad_key in zip( sorted(layer.params.keys()), sorted(layer.grads.keys()) ):
-            layer.params[param_key] += LR * self.velocity[layer_name + grad_key]
+            pass
         
+        ###################################################
 
     def save_velocity(self,layer_name, layer):
         """
@@ -36,10 +38,10 @@ class SGD_momentum_np:
         """
         for param_key, grad_key in zip( sorted(layer.params.keys()), sorted(layer.grads.keys()) ):
               
-            if (layer_name + grad_key) not in self.velocity.keys():
-                self.velocity[layer_name + grad_key] = -1 * layer.grads[grad_key]
-            else:
-                self.velocity[layer_name + grad_key] = self.alpha * self.velocity[layer_name + grad_key] - layer.grads[grad_key]
-
+            #################### edit here ####################
+            pass
+            
+            
+            ###################################################
     def step(self):
         pass

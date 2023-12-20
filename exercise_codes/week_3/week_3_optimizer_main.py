@@ -15,7 +15,7 @@ sys.path.append(parent_path)
 ###########################################################
 
 #import custom models
-from exercise_codes.week_3_models import *
+from week_3_models import *
 
 def load_data():
     #load mnist dataset.
@@ -131,7 +131,7 @@ def start(train_SGD_np=False, train_SGD_momentum_np=False, train_Adam_np=False):
 
 if __name__=="__main__":
     random.seed(71)
-    TOTAL_EPOCH=10
+    TOTAL_EPOCH=5
     BATCH_SIZE=48
-    LR=0.001
-    start(train_SGD_np=False, train_SGD_momentum_np=False, train_Adam_np=True)
+    LR=0.0001
+    start(train_SGD_np=True, train_SGD_momentum_np=True, train_Adam_np=True)

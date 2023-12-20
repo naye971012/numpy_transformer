@@ -1,6 +1,7 @@
 import numpy as np
 import torch
 import torch.nn as nn
+import tensorflow as tf
 from keras.datasets import mnist
 import random
 import torch.optim as optim
@@ -15,7 +16,7 @@ sys.path.append(parent_path)
 ###########################################################
 
 #import custom models
-from exercise_codes.week_2_models import *
+from week_2_models import *
 
 def load_data():
     #load mnist dataset.
@@ -201,7 +202,7 @@ def start(train_linear_th=False, train_linear_np=False, train_cnn_th=False, trai
 
 if __name__=="__main__":
     random.seed(71)
-    TOTAL_EPOCH=10
+    TOTAL_EPOCH=5
     BATCH_SIZE=48
     LR=0.01
-    start(train_linear_th=False,train_linear_np=True,train_cnn_th=False,train_cnn_np=True)
+    start(train_linear_th=True,train_linear_np=True,train_cnn_th=True,train_cnn_np=True)

@@ -9,17 +9,17 @@ parent_path = os.path.dirname(current_path)
 sys.path.append(parent_path)
 ###########################################################
 
-from torch_models.activations.relu import Relu_th
-from numpy_models.activations.relu import Relu_np
+#import torch layers
+from torch.nn import ReLU as Relu_th
+from torch.nn import Sigmoid as Sigmoid_th
+from torch.nn import BCELoss as Binary_Cross_Entropy_th
+from torch.nn import Linear as Linear_th
 
-from torch_models.activations.sigmoid import Sigmoid_th
-from numpy_models.activations.sigmoid import Sigmoid_np
-
-from torch_models.losses.binary_ce import Binary_Cross_Entropy_th
-from numpy_models.losses.binary_ce import Binary_Cross_Entropy_np
-
-from torch_models.commons.linear import Linear_th
-from numpy_models.commons.linear import Linear_np
+#import numpy layers
+from codes.relu import Relu_np
+from codes.sigmoid import Sigmoid_np
+from codes.binary_ce import Binary_Cross_Entropy_np
+from codes.linear import Linear_np
 
 def check_correct(prompt, _torch, _numpy, eps=1e-5):
     """

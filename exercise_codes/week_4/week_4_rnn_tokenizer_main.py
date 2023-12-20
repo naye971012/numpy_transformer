@@ -9,15 +9,15 @@ parent_path = os.path.dirname(current_path)
 sys.path.append(parent_path)
 ###########################################################
 
-from exercise_codes.week_4_models import *
-from numpy_models.tokenizer.word_tokenizer import Word_tokenizer_np
+from week_4_models import *
+from codes.word_tokenizer import Word_tokenizer_np
 
 """
     download small chatting data from here
     https://www.kaggle.com/datasets/projjal1/human-conversation-training-data    
 """
 
-DATA_PATH = "numpy_transformer/data/human_chat.txt"
+DATA_PATH = "numpy_transformer/exercise_codes/week_4/data/human_chat.txt"
 
 def process_data():
     
@@ -88,6 +88,7 @@ def main():
     model = myModel(tokenizer)
     
     #train start!
+    print("training start!")
     model = train(model, dataloader)
 
     #inference

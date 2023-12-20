@@ -9,7 +9,7 @@ parent_path = os.path.dirname(current_path)
 sys.path.append(parent_path)
 ###########################################################
 
-from activations.softmax import softmax_np
+from codes.fixed.softmax import softmax_np
 
 #X_Q = [# of batch, query dim, embed dim_xq]
 #W_Q = [embed dim_xq, embed dim]
@@ -130,6 +130,8 @@ class Attention_np:
         d_prev = [# of batch, query dim, embed dim]
         
         output = [# of batch, query dim, embed dim_xq]
+        
+        if q!=k, return q, k+v
         """
         
         dQ, dK, dV = [], [], []
@@ -175,11 +177,11 @@ class Attention_np:
         self.grad_v = np.dot(dV , self.params['W_V'].T)        
         
         #when q==k==v (self attention)
-        if(np.array_equal(self.x_k,self.x_v)):
+        if(np.array_equal(self.x_q,self.x_k)):
             return self.grad_q + self.grad_k + self.grad_v
         #when encoder-decoder attention
         else:
-            return self.grad_q + self.grad_k , self.grad_v
+            return self.grad_q , self.grad_k + self.grad_v
 
     def _bwd(self,i, dy, q, k, v, weights):
         """Actual computation of the gradient of the loss wrt. q, k, and v"""
@@ -207,17 +209,21 @@ class Attention_np:
 
 #test forward/backward dimension
 if __name__ == "__main__":
-    model = Attention_np(10,10,10,40,is_mask=True)
-    q = np.random.randn(3,7,10)
-    kv = np.random.randn(3,7,10)
+    model = Attention_np(20,20,20,40,is_mask=True)
+    q = np.random.randn(3,30,20)
+    kv = np.random.randn(3,30,20)
     
     output , att_map = model(q,kv,kv)
     print(output.shape)
     
     model.backward(output)
 
-    plt.xticks(np.arange(7), np.arange(7))
-    plt.yticks(np.arange(7), np.arange(7))
+    plt.xticks(np.arange(30), np.arange(30))
+    plt.xlabel('key')
+    
+    plt.yticks(np.arange(30), np.arange(30))
+    plt.ylabel('query')
+    
     plt.imshow(att_map[0], cmap='viridis', interpolation='nearest')
-    plt.colorbar()  # 컬러바 추가
+    plt.colorbar() 
     plt.show()

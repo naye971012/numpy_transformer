@@ -1,23 +1,19 @@
 import numpy as np
 import random
 
-from numpy_models.commons.linear import Linear_np
-from numpy_models.commons.attention import Attention_np
-from numpy_models.commons.cnn import Conv2d_np
+from codes.fixed.linear import Linear_np
+from codes.fixed.positional_encoding import Embedding_with_positional_encoding_np
+from codes.fixed.embedding import Embedding_np
+from codes.fixed.flatten import Flatten_np
+from codes.fixed.SGD import SGD_np
+from codes.fixed.ce import Cross_Entropy_np
+from codes.fixed.binary_ce import Binary_Cross_Entropy_np
+from codes.fixed.sigmoid import Sigmoid_np
+from codes.fixed.softmax import softmax_np
+from codes.fixed.relu import Relu_np
+from codes.fixed.layernorm import Layer_Normalization_np
 
-from numpy_models.utils.positional_encoding import Embedding_with_positional_encoding_np
-from numpy_models.utils.flatten import Flatten_np
-
-from numpy_models.optimizer.SGD import SGD_np
-
-from numpy_models.losses.ce import Cross_Entropy_np
-from numpy_models.losses.binary_ce import Binary_Cross_Entropy_np
-
-from numpy_models.activations.sigmoid import Sigmoid_np
-from numpy_models.activations.softmax import softmax_np
-from numpy_models.activations.relu import Relu_np
-
-from numpy_models.normalization.layernorm import Layer_Normalization_np
+from codes.attention import Attention_np
 
 class model_with_attention():
     def __init__(self, input_channel=10, output_channel=10) -> None:
@@ -25,15 +21,15 @@ class model_with_attention():
         self.optimizer = SGD_np()
         
         # [# of batch, 10] -> [# of batch, 10, 32]
-        self.embedding = Embedding_with_positional_encoding_np(10,128)
+        self.embedding = Embedding_with_positional_encoding_np(10,256)
         
         # [# of batch, 10, 32] -> [# of batch, 10, 16]
         self.norm1 = Layer_Normalization_np()
-        self.attention = Attention_np(128,128,128,64)
+        self.attention = Attention_np(256,256,256,256)
         
-        self.linear_1 = Linear_np(64 , 256)
+        self.linear_1 = Linear_np(256 , 512)
         self.norm2 = Layer_Normalization_np()
-        self.linear_2 = Linear_np(256, output_channel)
+        self.linear_2 = Linear_np(512, output_channel)
         
         self.activation_1 = Relu_np()
         self.activation_2 = Relu_np()
@@ -49,8 +45,11 @@ class model_with_attention():
         #x[# of batch, 10, 32]
         x = self.embedding(x)
         
+        # value of 0~9, query
+        q = self.embedding( np.tile( np.arange(10), (x.shape[0],1) ) )
+        
         #x[# of batch, 10 16]
-        x, att_map = self.attention(x,x,x) #query key value
+        x, att_map = self.attention(q,x,x) #query key value
         x = self.norm1(x)
         x = self.activation_1(x)
         
@@ -58,7 +57,7 @@ class model_with_attention():
         x = self.norm2(x)
         x = self.activation_2(x)
         
-        x = self.linear_2(x) #[# of batch, 10, 10]
+        x = self.linear_2(x) #[# of batch, 10, 2]
         x = self.softmax(x)
         
         # [# of batch, 10]
@@ -83,7 +82,7 @@ class model_with_attention():
         
         d_prev = self.activation_1.backward(d_prev)
         d_prev = self.norm1.backward(d_prev)
-        d_prev = self.attention.backward(d_prev)
+        _ , d_prev = self.attention.backward(d_prev)
         
         d_prev = self.embedding.backward(d_prev)
         return d_prev
@@ -108,7 +107,7 @@ class CustomDataset:
         
         #data = np.array([random.randint(0, 9) for _ in range(self.max_len)])
         #label = np.array([1 if (data[(i+1)%10]==data[i] or data[(i-1)%10]==data[i]) else 0 for i in range(len(data))])
-        label = np.array([ data[i] for i in range(len(data)) ])
+        label = np.array([ i+1 if data[i]==i else 0 for i in range(len(data)) ])
         
         return data,label
     

@@ -10,7 +10,7 @@ parent_path = os.path.dirname(current_path)
 sys.path.append(parent_path)
 ###########################################################
 
-from exercise_codes.week_6.week_6_models import *
+from week_6_models import *
 
 def train(model, dataloader):
     
@@ -35,10 +35,18 @@ def train(model, dataloader):
             
             if(len(dataloader)==i):
                 break
+            
+        print(input_text[0])
+        print(output_text[0])
+        print(np.argmax(pred[0],axis=1))
         
         if(epoch%20==19):
             plt.xticks(np.arange(10), input_text[0])
-            plt.yticks(np.arange(10), input_text[0])
+            plt.xlabel('key')
+            
+            plt.yticks(np.arange(10), np.arange(10))
+            plt.ylabel('query')
+            
             plt.imshow(att_map[0], cmap='viridis', interpolation='nearest')
             plt.colorbar()  # 컬러바 추가
             plt.show()
@@ -51,14 +59,14 @@ def main():
     dataloader = CustomDataloader(dataset, batch_size=BATCH_SIZE, shuffle=False)
     
     #define RNN model
-    model = model_with_attention(input_channel=10,output_channel=10)
+    model = model_with_attention(input_channel=10,output_channel=11)
     
     #train start!
     model = train(model, dataloader)
 
 
 if __name__=="__main__":
-    BATCH_SIZE = 10
+    BATCH_SIZE = 40
     TOTAL_EPOCH = 100
-    LR = 1e-3
+    LR = 1e-4
     main()

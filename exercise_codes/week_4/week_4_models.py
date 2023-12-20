@@ -9,20 +9,17 @@ parent_path = os.path.dirname(current_path)
 sys.path.append(parent_path)
 ###########################################################
 
-from numpy_models.tokenizer.vocab import Vocabulary
-from numpy_models.tokenizer.word_tokenizer import Word_tokenizer_np
+from codes.vocab import Vocabulary
+from codes.word_tokenizer import Word_tokenizer_np
+from codes.fixed.Adam import Adam_np
+from codes.fixed.ce import Cross_Entropy_np
+from codes.fixed.softmax import softmax_np
+from codes.fixed.relu import Relu_np
+from codes.fixed.linear import Linear_np
+from codes.fixed.embedding import Embedding_np
 
-from numpy_models.utils.embedding import Embedding_np
+from codes.rnn import RNN_np
 
-from numpy_models.commons.linear import Linear_np
-from numpy_models.commons.rnn import RNN_np
-
-from numpy_models.optimizer.Adam import Adam_np
-
-from numpy_models.losses.ce import Cross_Entropy_np
-
-from numpy_models.activations.softmax import softmax_np
-from numpy_models.activations.relu import Relu_np
 
 class myModel:
     def __init__(self, tokenizer: Word_tokenizer_np) -> None:
@@ -111,7 +108,7 @@ class myModel:
     def predict(self, text:str):
         output = self.forward([text])[0]
         output_ids = np.argmax(output,axis=1)
-        output_txt = self.tokenizer.convert_one_ids_to_tokens(output_ids)
+        output_txt = self.tokenizer.decode(output_ids)
         return output_txt
 
     def __call__(self, x):

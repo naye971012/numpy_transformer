@@ -35,7 +35,6 @@
 - **Topic**
   - LayerNorm
   - BatchNorm
-  - Residual Connection
 - **Week 5 Exercise**
   - compare w/wo Normalization Layers in terms of converge speed/accuracy
 
@@ -44,3 +43,17 @@
   - Attention
 - **Week 6 Exercise**
   - Visualize Attention layer
+  - Visualize Masked Attention map
+
+</br>
+</br>
+</br>
+</br>
+
+## there are 6 week curriculum, and each week folder has description markdown file
+
+<details>
+  <summary> description file example </summary>
+
+  ![exercise_example](../images/exercise_example.png)
+</details>

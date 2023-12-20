@@ -8,17 +8,14 @@ parent_path = os.path.dirname(current_path)
 sys.path.append(parent_path)
 ###########################################################
 
-from numpy_models.commons.linear import Linear_np
+from codes.fixed.linear import Linear_np
+from codes.fixed.SGD import SGD_np
+from codes.fixed.ce import Cross_Entropy_np
+from codes.fixed.softmax import softmax_np
+from codes.fixed.relu import Relu_np
 
-from numpy_models.optimizer.SGD import SGD_np
-
-from numpy_models.losses.ce import Cross_Entropy_np
-
-from numpy_models.activations.softmax import softmax_np
-from numpy_models.activations.relu import Relu_np
-
-from numpy_models.normalization.batchnorm import Batch_Normalization_1D_np
-from numpy_models.normalization.layernorm import Layer_Normalization_np
+from codes.batchnorm import Batch_Normalization_1D_np
+from codes.layernorm import Layer_Normalization_np
 
 class model_without_norm():
     def __init__(self, input_channel=28*28, output_channel=10) -> None:

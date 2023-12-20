@@ -15,4 +15,4 @@
 
 ## Excepted output
 
-![week_1_output](/images/week_1_output.png)
+![week_1_output](images/week_1_output.PNG)

@@ -33,8 +33,10 @@ from activations.softmax import softmax_np
 
 INF_MINUS = -100000
 
-class Attention_np:
+class Multihead_Attention_np:
     """
+    same as attention.py, except np.reshape(# of batch, # of block, dim, embed_dim)
+    
     attention layer which get query,key,value as input \
     input dimension should be [# of batch, ..., channel ] \
     this attention layer doesn't have WX+b in final output
@@ -43,9 +45,13 @@ class Attention_np:
                  key_embed_dim:int, 
                  value_embed_dim:int, 
                  attention_embed_dim:int = 256,
+                 num_heads:int = 4,
                  is_mask:bool = False, #used when masked self attention
                  scale:bool = True
                  ) -> None:
+        
+        assert attention_embed_dim%num_heads==0, "embed dim should be divisiable by heads"
+        
         self.params = dict()
         self.grads = dict()
         
@@ -58,7 +64,8 @@ class Attention_np:
         self.k_dim = key_embed_dim
         self.v_dim = value_embed_dim
         self.embed_dim = attention_embed_dim
-
+        self.num_heads = num_heads
+        
         self.init_params()
     
     def init_params(self):
@@ -101,26 +108,34 @@ class Attention_np:
         self.K = np.dot(x_k,self.params['W_K']) + self.params['b_K']
         self.V = np.dot(x_v,self.params['W_V']) + self.params['b_V']
 
-        #Q@K = [# of batch, query dim, value dim]
-        #softmax(Q@K) = [# of batch, query dim, value dim]
-        #V@softmax(Q@K) = [# of batch, query dim, attention_embed dim] = AttentionOutput
+
+        #Q = [# of batch, num_head, query dim, attention_embed dim//num_head]
+        #K = [# of batch, num_head, value dim, attention_embed dim//num_head]
+        #V = [# of batch, num_head, value dim, attention_embed dim//num_head]
+        b, qdim, attdim = self.Q.shape
+        b, vdim, attdim = self.V.shape
+        self.Q = np.reshape(self.Q, (b, self.num_heads, qdim, -1))
+        self.K = np.reshape(self.K, (b, self.num_heads, vdim, -1))
+        self.V = np.reshape(self.V, (b, self.num_heads, vdim, -1))        
+        
         
         """Actual computation of forward pass"""
         scale = 1 / np.sqrt(self.Q.shape[-1]) if self.scale else 1
         
         qk_ones =  np.ones((self.Q.shape[-2],self.V.shape[-2]))
-        #self.mask = qk_ones + np.triu(INF_MINUS *qk_ones,1) if self.is_mask else qk_ones
         self.mask = np.triu(INF_MINUS *qk_ones,1) if self.is_mask else np.zeros_like(qk_ones)
-
         
+        #Q@K = [# of batch, num_head, query dim, value dim]
         self.QK = self.Q @ self.K.swapaxes(-2, -1) * scale + self.mask  # attention scores
+        
+        #softmax(Q@K) = [# of batch, num_head, query dim, value dim]
         self.softQK = self.softmax.forward(self.QK)  # attention weights
+        
+        #V@softmax(Q@K) = [# of batch, num_head, query dim, attention_embed dim] = AttentionOutput
         self.VsoftQK = self.softQK @ self.V
         
-        #following is old code
-        #self.QK = np.matmul(self.Q, np.transpose(self.K, (0, 2, 1)))
-        #self.softQK = self.softmax(self.QK)
-        #self.VsoftQK = np.matmul(self.V.transpose(0, 2, 1), self.softQK.transpose(0, 2, 1)).transpose(0, 2, 1)
+        #concat heads = [# of batch, query dim, attention_embed dim]
+        self.VsoftQK = np.reshape(self.VsoftQK, (b, qdim, attdim))
         
         return self.VsoftQK, self.softQK #attention output and attention map
         
@@ -131,6 +146,9 @@ class Attention_np:
         
         output = [# of batch, query dim, embed dim_xq]
         """
+        b, qdim, embeddim = d_prev.shape
+        #d_prev = [# of batch, num_head, query dim, attention_embed dim//num_head]
+        d_prev = np.reshape(d_prev, (b,self.num_heads, qdim, -1))
         
         dQ, dK, dV = [], [], []
         weights = self.softQK
@@ -140,13 +158,16 @@ class Attention_np:
             dK.append(dk)
             dV.append(dv)
 
-        #if len(self.Q) == 1:
-        #    dQ, dK, dV = dQ[0], dK[0], dV[0]
-
         dQ = np.array(dQ)
         dK = np.array(dK)
         dV = np.array(dV)
         
+        # [# of batch, query dim, attention_embed dim]
+        b, _, qdim, _ = dQ.shape
+        b, _, vdim, _ = dV.shape
+        dQ = np.reshape(dQ, (b, qdim, -1))
+        dK = np.reshape(dK, (b, vdim, -1))
+        dV = np.reshape(dV, (b, vdim, -1))            
         
         #X_Q = [# of batch, query dim, embed dim_xq]
         #W_Q = [embed dim_xq, embed dim]
@@ -201,24 +222,26 @@ class Attention_np:
     
     
     def __call__(self,*args):
-        return self.forward(*args)
 
+        """
+        input: query, key, value
+        
+        #X_Q = [# of batch, query dim, embed dim_xq]
+        #X_K = [# of batch, key(value) dim, embed dim_xk]
+        #X_V = [# of batch, value dim, embed dim_xv]
+        
+        return: [# of batch, query dim, attention_embed dim], attention map
+        """
+        
+        return self.forward(*args)
 
 #test forward/backward dimension
 if __name__ == "__main__":
-    model = Attention_np(10,10,10,40,is_mask=True)
-    q = np.random.randn(3,5,7,10)
-    kv = np.random.randn(3,5,7,10)
+    model = Multihead_Attention_np(10,10,10,40,num_heads=4,is_mask=True)
+    q = np.random.randn(3,5,10)
+    kv = np.random.randn(3,5,10)
     
     output , att_map = model(q,kv,kv)
     print(output.shape)
     
     model.backward(output)
-
-    """
-    plt.xticks(np.arange(7), np.arange(7))
-    plt.yticks(np.arange(7), np.arange(7))
-    plt.imshow(att_map[0], cmap='viridis', interpolation='nearest')
-    plt.colorbar()  # 컬러바 추가
-    plt.show()
-    """

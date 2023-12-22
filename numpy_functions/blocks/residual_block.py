@@ -11,7 +11,7 @@ class Residual_block_np:
     
     def backward(self,d_prev):
         d_out = self.model.backward(d_prev)
-        return d_prev - d_out
+        return 1 + d_out
     
     def __call__(self,x):
         return self.forward(x)

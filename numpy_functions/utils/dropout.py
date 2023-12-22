@@ -23,7 +23,7 @@ class Dropout_np:
             np.array: [# of batch, ... ]
             
         """
-        self.drop_mask = np.random.rand(*x) > self.drop_prob
+        self.drop_mask = np.random.rand(*(x.shape)) > self.drop_prob
         x = x * self.drop_mask
         x = x / self.drop_prob
         

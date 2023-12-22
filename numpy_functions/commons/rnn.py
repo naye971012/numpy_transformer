@@ -1,7 +1,7 @@
 import numpy as np
-from numpy_models.activations.relu import Relu_np
-from numpy_models.activations.tanh import Tanh_np
-from numpy_models.activations.softmax import softmax_np
+from numpy_functions.activations.relu import Relu_np
+from numpy_functions.activations.tanh import Tanh_np
+from numpy_functions.activations.softmax import softmax_np
 
 """
     currently, this works only at batch size 1 -> TODO

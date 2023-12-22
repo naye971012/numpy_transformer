@@ -50,3 +50,25 @@ class FeedForward_np:
     
     def __call__(self, x) -> Any:
         return self.forward(x)
+
+    def update_grad(self,
+                    name:str="1",
+                    optimizer:Any=SGD_np,
+                    LR:float=0.001):
+        """
+        update weight recursively
+        
+        if layer is in numpy_functions, update gradient
+        else(layer is a block), call update_grad function recursively
+        
+        Args:
+            name (str): distinguish value
+            optimizer (Any): your optimizer
+            lr (float): learning rate
+        """
+
+        optimizer.update_grad('tf_encoder_ffd_outputlayer'+ name , self.output_layer, LR)
+        optimizer.update_grad('tf_encoder_ffd_inputlayer'+ name , self.input_layer, LR)
+        optimizer.update_grad('tf_encoder_ffd_activation'+ name , self.activation, LR)
+        
+        optimizer.update_grad('tf_encoder_ffd_droplayer'+ name , self.drop_layer, LR) if self.drop else 1

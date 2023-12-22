@@ -87,3 +87,24 @@ class transformer_encoder_block_np:
     
     def __call__(self, x:np.array) -> np.array:
         return self.forward(x)
+
+    def update_grad(self,
+                    name:str="1",
+                    optimizer:Any=SGD_np,
+                    LR:float=0.001):
+        """
+        update weight recursively
+        
+        if layer is in numpy_functions, update gradient
+        else(layer is a block), call update_grad function recursively
+        
+        Args:
+            name (str): distinguish value
+            optimizer (Any): your optimizer
+            lr (float): learning rate
+        """
+        
+        optimizer.update_grad('tf_encoder_block_layernorm2'+ name , self.layernorm_layer2, LR)
+        optimizer.update_grad('tf_encoder_block_layernorm1'+ name , self.layernorm_layer1, LR)
+        optimizer.update_grad('tf_encoder_block_ffd'+ name , self.feedforward_layer, LR)
+        optimizer.update_grad('tf_encoder_block_selfatt'+ name , self.self_attention_layer, LR)

@@ -22,9 +22,13 @@ class transformer_encoder_np:
                  num_heads:int=4,
                  vocab_size:int=10000) -> None:
         """
+        
         Args:
-            sentence_length (int): _description_. Defaults to 50.
-            vocab (Vocabulary): _description_. Defaults to None.
+            num_blocks (int, optional): num of block in encoder. Defaults to 4.
+            sentence_length (int, optional): length of sentence . Defaults to 50.
+            embedding_dim (int, optional): embedding dimension. Defaults to 128.
+            num_heads (int, optional): num of head in attention. Defaults to 4.
+            vocab_size (int, optional): num of vocab size in tokenizer. Defaults to 10000.
         """
         assert embedding_dim%num_heads==0, "embedding dim should be divisiable to num_heads"
         
@@ -66,8 +70,14 @@ class transformer_encoder_np:
         
         return x
     
-    def backward(self, d_prev:np.array) -> np.array:
-        
+    def backward(self, d_prev:np.array) -> None:
+        """
+        Args:
+            d_prev (np.array): [# of batch, sentence length, vocab size]
+
+        Returns:
+            None
+        """        
         d_prev = self.softmax.backward(d_prev)
         d_prev = self.output_layer.backward(d_prev)
         
@@ -79,7 +89,29 @@ class transformer_encoder_np:
     
     def __call__(self, x:np.array) -> np.array:
         return self.forward(x)
-
+    
+    def update_grad(self,
+                    name:str="1",
+                    optimizer:Any=SGD_np,
+                    LR:float=0.001):
+        """
+        update weight recursively
+        
+        if layer is in numpy_functions, update gradient
+        else(layer is a block), call update_grad function recursively
+        
+        Args:
+            name (str): distinguish value
+            optimizer (Any): your optimizer
+            lr (float): learning rate
+        """
+        
+        optimizer.update_grad('tf_encoder_optimizer'+ name , self.embedding_layer, LR)
+        optimizer.update_grad('tf_encoder_softmax'+ name , self.softmax, LR)
+        optimizer.update_grad('tf_encoder_outputlayer'+ name , self.output_layer, LR)
+        
+        for i in range(self.num_blocks):
+            self.block_layer[i].update_grad(name + str(i) , optimizer, LR)
 
 
 if __name__=="__main__":
@@ -91,5 +123,9 @@ if __name__=="__main__":
     
     x = np.random.randint(0,100,size=(10,50))
     
+    sgd = SGD_np()
+    
     out = encoder(x)
     encoder.backward(out)
+    
+    encoder.update_grad("1",sgd,0.001)

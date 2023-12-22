@@ -41,6 +41,9 @@ class Adam_np:
             layer (_type_): layer(ex.)
             LR (float): Learning rate
         """
+        if not hasattr(layer, 'param'):
+            return  # Break the process as there are no parameters to update
+
         self.save_velocity(layer_name,layer)
         self.save_momentum(layer_name,layer)
 

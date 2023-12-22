@@ -16,7 +16,9 @@ class SGD_np:
             layer (_type_): layer(ex.)
             LR (float): Learning rate
         """
-        
+        if not hasattr(layer, 'param'):
+            return  # Break the process as there are no parameters to update
+    
         for param_key, grad_key in zip( sorted(layer.params.keys()), sorted(layer.grads.keys()) ):
             layer.params[param_key] -= LR * layer.grads[grad_key]
         

@@ -11,7 +11,7 @@ sys.path.append(grand_path)
 ###########################################################
 
 from numpy_functions import *
-from encoder_block import transformer_encoder_block_np
+from numpy_models.transformer.encoder_block import transformer_encoder_block_np
 
 
 class transformer_encoder_np:

@@ -95,11 +95,13 @@ class Embedding_with_positional_encoding_np:
 #check dimension & visualize
 if __name__=="__main__":
     
-    model = Embedding_with_positional_encoding_np(10,20)
-    x = np.random.randint(0,9, size=(1,5))
+    model = Embedding_with_positional_encoding_np(5,20)
+    x = np.random.randint(0,5, size=(1,5))
     output = model(x)
+    print(x)
+    #print(output)
     model.backward(output)
-
+    print(model.grads['dW'])
     """
     import matplotlib.pyplot as plt
     ### Plotting ####

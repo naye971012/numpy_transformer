@@ -13,11 +13,12 @@ class Vocabulary:
         """
         basic special tokens
         """
-        self.add_word('<pad>')
-        self.add_word('<unk>')
-        self.add_word('<cls>')
-        self.add_word('<eos>')
-        self.add_word('</s>')
+        self.add_word('[MASK]') #mask token
+        self.add_word('[SEP]') #end of data
+        self.add_word('[PAD]') #padding token
+        self.add_word('[UNK]') #unknworn token
+        self.add_word('[CLS]') #class (first) token
+        self.add_word('[EOS]') #end of sentence
         
     def add_word(self, word: str):
         """
@@ -42,7 +43,7 @@ class Vocabulary:
             int: vocab index of word
         """
         if word not in self.word2idx:
-            return self.word2idx['<unk>']
+            return self.word2idx['[UNK]']
         return self.word2idx[word]
 
     def __len__(self):

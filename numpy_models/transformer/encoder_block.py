@@ -2,7 +2,7 @@ from typing import Any
 import numpy as np
 
 from numpy_functions import *
-from feedforward import FeedForward_np
+from numpy_models.transformer.feedforward import FeedForward_np
 
 class transformer_encoder_block_np:
     def __init__(self, 

@@ -21,7 +21,7 @@ class SGD_momentum_np:
             LR (float): Learning rate
             have_db (bool): layer에 dW외에 db가 있는지 유무, default=True
         """
-        if not hasattr(layer, 'param'):
+        if not hasattr(layer, 'params'):
             return  # Break the process as there are no parameters to update
 
         self.save_velocity(layer_name,layer)
@@ -29,7 +29,7 @@ class SGD_momentum_np:
         for param_key, grad_key in zip( sorted(layer.params.keys()), sorted(layer.grads.keys()) ):
             layer.params[param_key] += LR * self.velocity[layer_name + grad_key]
         
-
+        
     def save_velocity(self,layer_name, layer):
         
         for param_key, grad_key in zip( sorted(layer.params.keys()), sorted(layer.grads.keys()) ):

@@ -1,3 +1,3 @@
-from encoder_block import transformer_encoder_block_np
-from encoder import transformer_encoder_np
-from feedforward import FeedForward_np
+from numpy_models.transformer.encoder_block import transformer_encoder_block_np
+from numpy_models.transformer.encoder import transformer_encoder_np
+from numpy_models.transformer.feedforward import FeedForward_np

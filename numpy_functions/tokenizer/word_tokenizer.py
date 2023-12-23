@@ -29,6 +29,7 @@ class Word_tokenizer_np:
         Returns:
             List[List[str]]: list of tokenized token list
         """
+        
         output_list = list()
         for cur_list in input_list:
             cur_list = self.clean_text(cur_list)
@@ -96,7 +97,7 @@ class Word_tokenizer_np:
             #when padding, make length==max_length padding blank with zero
             if padding:
                 if len(list_ids) < max_length:
-                    list_ids += [self.vocab('<pad>')] * (max_length - len(list_ids))
+                    list_ids += [self.vocab('[PAD]')] * (max_length - len(list_ids))
                 else:
                     list_ids = list_ids[:max_length]
                     

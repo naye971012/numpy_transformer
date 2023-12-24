@@ -3,3 +3,5 @@ __pycache__/
 dummy_codes.*
 *.txt
 data/*
+wandb
+wandb/*

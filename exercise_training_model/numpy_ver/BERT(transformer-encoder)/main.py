@@ -30,6 +30,7 @@ def train(args):
                                      vocab_size=len(tokenizer.vocab))
     optimizer = SGD_momentum_np()
     
+    #ignore padding token when calculate accuracy
     ignore_idx = tokenizer.vocab.word2idx['[PAD]']
     
     for epoch in range(args.epoch):
@@ -66,9 +67,44 @@ def train(args):
                 print(pred[0])
                 print()
 
-def validate(args, valid_loader):
-    pass
+                wandb.log({"train_acc": epoch_acc/(i+1),
+                        "train_loss": epoch_loss/(i+1)})
+        
+        validate(args,Bert_model,valid_loader,ignore_idx)
+        
+def validate(args, model, valid_loader, ignore_idx:int):
 
+    valid_loss = 0.0
+    valid_acc = 0.0
+    tqdm_batch = tqdm(valid_loader, desc=f"Validation")
+    for i, batch in enumerate(tqdm_batch):
+            
+        _input = np.array(batch['input'])
+        _label = np.array(batch['label'])
+            
+        out = model.forward(_input)
+        pred = model.predict(out)
+            
+        acc = accuracy(pred, _label, ignore_idx)
+        loss = model.loss(out,_label)
+            
+        valid_acc  += acc
+        valid_loss += loss
+            
+        tqdm_batch.set_postfix(loss=valid_loss/(i+1), acc=valid_acc/(i+1))
+
+        if(i%10==0):
+            print("____label_____")
+            print(_label[0])
+            print("____input_____")
+            print(_input[0])
+            print("____pred______")
+            print(pred[0])
+            print()
+
+    wandb.log({"validation_acc": valid_acc/(i+1),
+               "validation_loss": valid_loss/(i+1)})
+    
 def get_loader(args) -> Tuple:
     """
     for convenience, I use huggingface dataset library.
@@ -115,8 +151,8 @@ if __name__=="__main__":
     
     #Train arguments
     parser.add_argument('--batch_size', type=int, default=6, help='batch size')
-    parser.add_argument('--lr', type=float, default=0.0001, help='learning rate')
-    parser.add_argument('--epoch', type=int, default=10, help='epoch')
+    parser.add_argument('--lr', type=float, default=0.001, help='learning rate')
+    parser.add_argument('--epoch', type=int, default=20, help='epoch')
 
 
     #Bert model arguments
@@ -125,9 +161,27 @@ if __name__=="__main__":
     parser.add_argument('--embedding', type=int, default=256, help='embedding layer dimension')
     parser.add_argument('--num_heads', type=int, default=4, help='num of head for self attention')
 
-
     # Parse the arguments
     args = parser.parse_args()
+
+
+    # Initialize wandb with specific settings
+    wandb.init(
+        project='Numpy_models',  # Set your project name
+        name="Bert_numpy",
+        config={                       # Set configuration parameters (optional)
+            'learning_rate': args.lr,
+            'batch_size': args.batch_size,
+            'epoch': args.epoch,
+            'num_blocks': args.num_blocks,
+            'max_len': args.max_len,
+            'embedding': args.embedding,
+            'num_heads': args.num_heads,
+            'optimizer': "sgd_momentum",
+            'data_name': args.data_name
+        }
+    )
+
 
     train(args)
     

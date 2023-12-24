@@ -86,6 +86,17 @@ class Embedding_with_positional_encoding_np:
         self.grads['dW'] = np.zeros_like(self.params['W'])
         np.add.at(self.grads['dW'], self.forward_input, d_prev)
 
+        counter = np.zeros_like(self.params['W'])  # Counter array to track updates
+        np.add.at(counter, self.forward_input, 1)  # Update the counter array
+        # Avoid dividing by zero where counter is zero
+        # Replace zeros in the counter with ones to prevent division issues
+        counter = counter / d_prev.shape[0]
+        
+        counter[counter == 0] = 1
+        
+        # Divide each gradient by the corresponding count in the counter array
+        self.grads['dW'] /= counter
+
         return None
     
     def __call__(self,x):

@@ -64,7 +64,8 @@ class Embedding_np:
         
         self.grads['dW'] = np.zeros_like(self.params['W'])
         np.add.at(self.grads['dW'], self.forward_input, d_prev)
-
+    
+        
         return None
     
     def __call__(self,x):

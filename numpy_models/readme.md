@@ -1,1 +1,2 @@
-## **TODO - Implement Transformer, VIT, GAN, etc...**
+## Completed List:
+1. Bert (Transformer-Encoder archicture)

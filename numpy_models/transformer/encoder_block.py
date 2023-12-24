@@ -77,7 +77,7 @@ class transformer_encoder_block_np:
         
         d_prev = self.layernorm_layer2.backward(d_prev)
         d_prev = self.feedforward_layer.backward(d_prev)
-        d_prev = d_prev + 1
+        d_prev = d_prev + 1        
         
         d_prev = self.layernorm_layer1.backward(d_prev)
         d_prev = self.self_attention_layer.backward(d_prev)
@@ -106,5 +106,6 @@ class transformer_encoder_block_np:
         
         optimizer.update_grad('tf_encoder_block_layernorm2'+ name , self.layernorm_layer2, LR)
         optimizer.update_grad('tf_encoder_block_layernorm1'+ name , self.layernorm_layer1, LR)
-        optimizer.update_grad('tf_encoder_block_ffd'+ name , self.feedforward_layer, LR)
         optimizer.update_grad('tf_encoder_block_selfatt'+ name , self.self_attention_layer, LR)
+        
+        self.feedforward_layer.update_grad(name , optimizer, LR)

@@ -1,49 +1,54 @@
 # numpy_transformer
 numpy implementation of pytorch deep learning models including Transformer \
-6 weeks basic study curriculum with exercise code!
+6 weeks basic study curriculum with exercise code
 
 2023-2 인공지능 연합동아리 프로메테우스 4기 강의/실습 자료
 [prometheus-ai website](https://prometheus-ai.net/about)
 
-# Completed Checklist
+## Models
+- Bert (Transformer-Encoder Archicture)
+
+
+
+## Completed Checklist
 
 Here is the current checklist of completed items:
 
-## Activation Functions
-- ReLU (Rectified Linear Unit)
+### Activation Functions
+- ReLU
 - Sigmoid
 - Softmax
 - Tanh
 
-## Loss Functions
+### Loss Functions
 - Cross-Entropy Loss
 - Binary Cross-Entropy Loss
 
-## Layers
+### Layers
 - Linear Layer
 - CNN (Convolutional Neural Network)
 - RNN (Recurrent Neural Network)
 - Scaled Dot Product Attention
 
-## Optimizers
+### Optimizers
 - SGD
 - SGD with momentum
 - Adam
 
-## Utilities
+### Utilities
 - Dropout
 - Embedding
 - Positional Encoding
 - Flatten
 - MaxPooling
 
-## Tokenizer
+### Tokenizer
 - Vocabulary set
 - Word Tokenizer
 
-## Normalization
+### Normalization
 - Batch Normalization
 - Layer Normalization
 
-## Blocks
+### Blocks
 - Plain Residual Block

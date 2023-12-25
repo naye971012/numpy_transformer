@@ -6,8 +6,8 @@ numpy implementation of pytorch deep learning models including Transformer \
 [prometheus-ai website](https://prometheus-ai.net/about)
 
 ## Models
-- Bert (Transformer-Encoder Archicture)
-
+- Bert (Transformer-Encoder Architecture)
+- GAN (Generative Adversarial Network)
 
 
 ## Completed Checklist

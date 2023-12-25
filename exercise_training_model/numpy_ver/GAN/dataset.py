@@ -1,11 +1,11 @@
-from keras.datasets import fashion_mnist
+from keras.datasets import fashion_mnist, mnist
 import random
 import numpy as np
 
 
 def load_data():
     #load mnist dataset.
-    (train_images, train_labels), (test_images, test_labels) = fashion_mnist.load_data()
+    (train_images, train_labels), (test_images, test_labels) = mnist.load_data()
 
     #since dataset is too big for cpu, reduce size
     train_random_indices = random.sample(range(len(train_images)), 60000)
@@ -41,7 +41,7 @@ class CustomDataset:
         return (input, output) tuple
         """
         _input = np.array([self.img[idx]])/255
-        _output = np.array([1])
+        _output = np.array(1)
         
         return _input, _output
     

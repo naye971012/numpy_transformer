@@ -26,5 +26,6 @@ from numpy_functions.utils.dropout import Dropout_np
 from numpy_functions.utils.embedding import Embedding_np
 from numpy_functions.utils.flatten import Flatten_np
 from numpy_functions.utils.positional_encoding import Embedding_with_positional_encoding_np
+from numpy_functions.utils.pooling import MaxPooling2D_np
 
 from numpy_functions.metric.metric import *

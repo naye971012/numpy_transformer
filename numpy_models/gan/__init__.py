@@ -1,0 +1,1 @@
+from numpy_models.gan.simple_gan import Generator_np, Discriminator_np

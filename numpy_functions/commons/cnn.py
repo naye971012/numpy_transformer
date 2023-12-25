@@ -109,7 +109,7 @@ class Conv2d_np:
         h_f, w_f, _, _ = self.params['W'].shape
         pad = self.calculate_pad_dims()
         a_prev_pad = self.pad(array=self._a_prev, pad=pad)
-        output = np.zeros_like(a_prev_pad)
+        output = np.zeros_like(a_prev_pad, dtype=np.float64)
 
         self.grads['db'] = da_curr.sum(axis=(0, 1, 2)) / n
         self.grads['dW'] = np.zeros_like(self.params['W'])

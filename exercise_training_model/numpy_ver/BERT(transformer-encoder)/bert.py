@@ -11,7 +11,7 @@ sys.path.append(grand_path)
 ###########################################################
 
 from numpy_functions import *
-from numpy_models.transformer import transformer_encoder_np
+from numpy_models.bert import transformer_encoder_np
 
 
 class Bert_np:
@@ -49,7 +49,11 @@ class Bert_np:
                                               num_heads=self.num_heads,
                                               vocab_size=self.vocab_size)
         self.criterion = Cross_Entropy_np()
-    
+
+        self.softmax = softmax_np()
+        self.output_layer = Linear_np(self.embedding_dim, self.vocab_size)
+        
+        
     def forward(self, x:np.array) -> np.array:
         """
         Args:
@@ -59,6 +63,10 @@ class Bert_np:
             np.array: [# of batch, sentence length, vocab size]
         """
         x = self.encoder.forward(x)
+        
+        x = self.output_layer(x)
+        x = self.softmax(x)
+        
         return x
     
     def predict(self, x:np.array) -> np.array:
@@ -94,6 +102,10 @@ class Bert_np:
         backward process of bert model
         """
         d_prev = self.criterion.backward(1)
+        
+        d_prev = self.softmax.backward(d_prev)
+        d_prev = self.output_layer.backward(d_prev)
+        
         d_prev = self.encoder.backward(d_prev)
         return d_prev
     
@@ -114,6 +126,9 @@ class Bert_np:
             optimizer (Any): your optimizer
             lr (float): learning rate
         """
+        optimizer.update_grad('tf_Bert_softmax' , self.softmax, LR)
+        optimizer.update_grad('tf_Bert_outputlayer' , self.output_layer, LR)
+        
         self.encoder.update_grad(name="Bert",
                                  optimizer=optimizer,
                                  LR=LR)

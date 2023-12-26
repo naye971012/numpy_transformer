@@ -195,11 +195,11 @@ class Multihead_Attention_np:
         self.grad_v = np.dot(dV , self.params['W_V'].T)        
         
         #when q==k==v (self attention)
-        if(np.array_equal(self.x_k,self.x_v)):
+        if(np.array_equal(self.x_q,self.x_k)):
             return self.grad_q + self.grad_k + self.grad_v
         #when encoder-decoder attention
         else:
-            return self.grad_q + self.grad_k , self.grad_v
+            return self.grad_q , self.grad_k + self.grad_v
 
     def _bwd(self,i, dy, q, k, v, weights):
         """Actual computation of the gradient of the loss wrt. q, k, and v"""

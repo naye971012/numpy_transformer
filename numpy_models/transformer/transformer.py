@@ -11,10 +11,9 @@ sys.path.append(grand_path)
 ###########################################################
 
 from numpy_functions import *
-from numpy_models.transformer.encoder_block import transformer_encoder_block_np
+from numpy_models.transformer import *
 
-
-class transformer_encoder_np:
+class transformer_np:
     def __init__(self,
                  num_blocks:int = 4,
                  sentence_length:int=50,
@@ -43,45 +42,61 @@ class transformer_encoder_np:
     
     def init_params(self):
         
-        self.embedding_layer = Embedding_with_positional_encoding_np(num_emb=self.vocab_size,
-                                                                     num_dim=self.embedding_dim)
+        self.encoder = transformer_encoder_np(num_blocks=self.num_blocks,
+                                              sentence_length=self.sentence_length,
+                                              embedding_dim=self.embedding_dim,
+                                              num_heads=self.num_heads,
+                                              vocab_size=self.vocab_size)
+        
+        self.decoder = transformer_decoder_np(num_blocks=self.num_blocks,
+                                              sentence_length=self.sentence_length,
+                                              embedding_dim=self.embedding_dim,
+                                              num_heads=self.num_heads,
+                                              vocab_size=self.vocab_size)
 
-        self.block_layer = [transformer_encoder_block_np(embedding_dim=self.embedding_dim,
-                                                         num_heads=self.num_heads) for _ in range(self.num_blocks)]
 
-
-    def forward(self,x:np.array) -> np.array:
+    def forward(self,encoder_x:np.array, decoder_x:np.array) -> np.array:
         """
         Args:
-            x (np.array): [# of batch, sentence length]
+            encoder_x (np.array): encoder input x[# of batch, sentence length]
+            decoder_x (np.array): decoder input x[# of batch, sentence length]
 
         Returns:
-            np.array: [# of batch, sentence length, vocab size]
+            prediction (np.array): [# of batch, sentence length, vocab size]
         """
-        x = self.embedding_layer(x)
-
-        for i in range(self.num_blocks):
-            x = self.block_layer[i](x)
         
-        return x
+        encoder_out = self.encoder(encoder_x)
+        
+        decoder_out = self.decoder(decoder_x, encoder_out)
+        
+        return decoder_out
+        
     
     def backward(self, d_prev:np.array) -> None:
         """
         Args:
-            d_prev (np.array): [# of batch, sentence length, embedding dim]
+            d_prev (np.array): [# of batch, sentence length, vocab size]
 
         Returns:
             None
         """        
         
-        for i in range(self.num_blocks-1,-1,-1):
-            d_prev = self.block_layer[i].backward(d_prev)
-        d_prev =self.embedding_layer.backward(d_prev)
+        _, encoder_d_prev = self.decoder.backward(d_prev)
+        
+        d_prev = self.encoder.backward(encoder_d_prev)
         
         return d_prev
     
-    def __call__(self, x:np.array) -> np.array:
-        return self.forward(x)
+    def __call__(self, encoder_x:np.array, decoder_x:np.array) -> np.array:
+        """
+        Args:
+            encoder_x (np.array): encoder input x[# of batch, sentence length]
+            decoder_x (np.array): decoder input x[# of batch, sentence length]
+
+        Returns:
+            prediction (np.array): [# of batch, sentence length, vocab size]
+        """
+        return self.forward(encoder_x, decoder_x)
     
     def update_grad(self,
                     name:str="1",
@@ -99,14 +114,13 @@ class transformer_encoder_np:
             lr (float): learning rate
         """
         
-        optimizer.update_grad('tf_encoder_embedding'+ name , self.embedding_layer, LR)
-
-        for i in range(self.num_blocks):
-            self.block_layer[i].update_grad(name + str(i) , optimizer, LR)
+        self.encoder.update_grad(name , optimizer, LR)
+        self.decoder.update_grad(name , optimizer, LR)
 
 
+#for check dimension
 if __name__=="__main__":
-    encoder = transformer_encoder_np(num_blocks=4,
+    transformer = transformer_np(num_blocks=4,
                                      sentence_length=50,
                                      embedding_dim=128,
                                      num_heads=4,
@@ -116,7 +130,7 @@ if __name__=="__main__":
     
     sgd = SGD_np()
     
-    out = encoder(x)
-    encoder.backward(out)
+    out = transformer(x,x)
     
-    encoder.update_grad("1",sgd,0.001)
+    transformer.backward(out)
+    transformer.update_grad("1",sgd,0.001)

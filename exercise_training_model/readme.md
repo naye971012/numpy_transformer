@@ -53,4 +53,5 @@
 </br>
 
 2. **GAN (Generative Adversarial Network)** <a name="gan"></a>
-- currently, it has error (divergence when training generator) **TODO**
+- currently, it has 'mode collapse' problem
+- I implemented GAN/Diffusion in another repository, [Generative Models](https://github.com/naye971012/Generative_models)

@@ -43,10 +43,11 @@ class transformer_encoder_np:
     
     def init_params(self):
         
-        ################### EDIT HERE ##########################
-        
-        pass
-        ########################################################
+        self.embedding_layer = Embedding_with_positional_encoding_np(num_emb=self.vocab_size,
+                                                                     num_dim=self.embedding_dim)
+
+        self.block_layer = [transformer_encoder_block_np(embedding_dim=self.embedding_dim,
+                                                         num_heads=self.num_heads) for _ in range(self.num_blocks)]
 
 
     def forward(self,x:np.array) -> np.array:
@@ -57,10 +58,12 @@ class transformer_encoder_np:
         Returns:
             np.array: [# of batch, sentence length, vocab size]
         """
-        ################### EDIT HERE ##########################
+        x = self.embedding_layer(x)
+
+        for i in range(self.num_blocks):
+            x = self.block_layer[i](x)
         
-        pass
-        ########################################################
+        return x
     
     def backward(self, d_prev:np.array) -> None:
         """
@@ -70,10 +73,12 @@ class transformer_encoder_np:
         Returns:
             None
         """        
-        ################### EDIT HERE ##########################
         
-        pass
-        ########################################################
+        for i in range(self.num_blocks-1,-1,-1):
+            d_prev = self.block_layer[i].backward(d_prev)
+        d_prev =self.embedding_layer.backward(d_prev)
+        
+        return d_prev
     
     def __call__(self, x:np.array) -> np.array:
         return self.forward(x)
@@ -93,10 +98,11 @@ class transformer_encoder_np:
             optimizer (Any): your optimizer
             lr (float): learning rate
         """
-        ################### EDIT HERE ##########################
         
-        pass
-        ########################################################
+        optimizer.update_grad('tf_encoder_embedding'+ name , self.embedding_layer, LR)
+
+        for i in range(self.num_blocks):
+            self.block_layer[i].update_grad(name + str(i) , optimizer, LR)
 
 
 if __name__=="__main__":

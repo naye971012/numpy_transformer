@@ -2,6 +2,7 @@
 
 1. BERT (Transformer-Encoder archicture) [Bert](#bert) 
 2. GAN (Generative Adversarial Network) [GAN](#gan)
+3. Transformer [Transformer](#transformer)
 
 </br>
 
@@ -52,6 +53,14 @@
 </br>
 </br>
 
-2. **GAN (Generative Adversarial Network)** <a name="gan"></a>
+### 2. **GAN (Generative Adversarial Network)** <a name="gan"></a>
 - currently, it has 'mode collapse' problem
 - I implemented GAN/Diffusion in another repository, [Generative Models](https://github.com/naye971012/Generative_models)
+
+</br>
+</br>
+</br>
+
+### 3. **Transformer** <a name="transformer"></a>
+- Transformer doesn't have training example code.
+- It only has model implementation code.

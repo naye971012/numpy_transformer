@@ -24,26 +24,27 @@ class FeedForward_np:
         
     def init_params(self) -> None:
         
-        ################### EDIT HERE ##########################
+        self.input_layer = Linear_np(self.layer_dim, self.layer_dim * self.expose)
+        self.output_layer = Linear_np(self.layer_dim * self.expose, self.layer_dim)
         
-        pass
-        ########################################################
+        self.activation = Relu_np()
+        self.drop_layer = Dropout_np(self.drop_p)
     
     def forward(self,x:np.array) -> np.array:
         
-        ################### EDIT HERE ##########################
-        
-        pass
-        ########################################################
+        x = self.input_layer(x)
+        x = self.activation(x)
+        x = self.drop_layer(x) if self.drop else x
+        x = self.output_layer(x)
         
         return x
     
     def backward(self, d_prev:np.array) -> np.array:
         
-        ################### EDIT HERE ##########################
-        
-        pass
-        ########################################################
+        d_prev = self.output_layer.backward(d_prev)
+        d_prev = self.drop_layer.backward(d_prev) if self.drop else d_prev
+        d_prev = self.activation.backward(d_prev)
+        d_prev = self.input_layer.backward(d_prev)
         
         return d_prev
     
@@ -66,7 +67,8 @@ class FeedForward_np:
             lr (float): learning rate
         """
 
-        ################### EDIT HERE ##########################
+        optimizer.update_grad('tf_encoder_ffd_outputlayer'+ name , self.output_layer, LR)
+        optimizer.update_grad('tf_encoder_ffd_inputlayer'+ name , self.input_layer, LR)
+        optimizer.update_grad('tf_encoder_ffd_activation'+ name , self.activation, LR)
         
-        pass
-        ########################################################
+        optimizer.update_grad('tf_encoder_ffd_droplayer'+ name , self.drop_layer, LR) if self.drop else 1

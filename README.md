@@ -117,6 +117,7 @@ numpy implementation of pytorch deep learning models including Transformer \
 ## Models
 - Bert (Transformer-Encoder Architecture)
 - GAN (Generative Adversarial Network)
+- Transformer
 
 ## Completed Checklist
 
@@ -160,3 +161,10 @@ Here is the current checklist of completed items:
 
 ### Blocks
 - Plain Residual Block
+
+
+
+## Tree
+```
+
+```

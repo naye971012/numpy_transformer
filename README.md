@@ -166,5 +166,128 @@ Here is the current checklist of completed items:
 
 ## Tree
 ```
-
+.
+├── exercise_studying_functions
+│   ├── readme.md
+│   ├── week_1
+│   │   ├── codes
+│   │   │   ├── binary_ce.py
+│   │   │   ├── linear.py
+│   │   │   ├── relu.py
+│   │   │   └── sigmoid.py
+│   │   ├── readme.md
+│   │   └── week_1_relu-sigmoid-bceloss-mlp.py
+│   ├── week_2
+│   │   ├── codes
+│   │   │   ├── cnn.py
+│   │   │   ├── flatten.py
+│   │   │   └── pooling.py
+│   │   ├── readme.md
+│   │   ├── week_2_cnn_main.py
+│   │   └── week_2_models.py
+│   ├── week_3
+│   │   ├── codes
+│   │   │   ├── Adam.py
+│   │   │   ├── dropout.py
+│   │   │   ├── embedding.py
+│   │   │   ├── positional_encoding.py
+│   │   │   ├── SGD_momentum.py
+│   │   │   └── SGD.py
+│   │   ├── readme.md
+│   │   ├── week_3_models.py
+│   │   └── week_3_optimizer_main.py
+│   ├── week_4
+│   │   ├── codes
+│   │   │   ├── rnn.py
+│   │   │   ├── vocab.py
+│   │   │   └── word_tokenizer.py
+│   │   ├── data
+│   │   ├── readme.md
+│   │   ├── week_4_models.py
+│   │   └── week_4_rnn_tokenizer_main.py
+│   ├── week_5
+│   │   ├── codes
+│   │   │   ├── batchnorm.py
+│   │   │   └── layernorm.py
+│   │   ├── readme.md
+│   │   ├── week_5_models.py
+│   │   └── week_5_normalization.py
+│   └── week_6
+│       ├── codes
+│       │   └── attention.py
+│       ├── readme.md
+│       ├── week_6_attention.py
+│       └── week_6_models.py
+├── exercise_training_model
+│   ├── numpy_ver
+│   │   ├── BERT(transformer-encoder)
+│   │   │   ├── bert.py
+│   │   │   ├── dataset.py
+│   │   │   └── main.py
+│   │   ├── GAN
+│   │   │   ├── dataset.py
+│   │   │   ├── main.py
+│   │   │   └── output_example
+│   │   └── Transformer
+│   │       └── transformer.py
+│   ├── readme.md
+│   └── torch_ver
+│       ├── BERT(transformer-encoder)
+│       │   ├── bert.py
+│       │   ├── dataset.py
+│       │   └── main.py
+│       └── GAN
+│           └── readme.md
+├── numpy_functions
+│   ├── activations
+│   │   ├── relu.py
+│   │   ├── sigmoid.py
+│   │   ├── softmax.py
+│   │   └── tanh.py
+│   ├── blocks
+│   │   └── residual_block.py
+│   ├── commons
+│   │   ├── attention.py
+│   │   ├── cnn.py
+│   │   ├── linear.py
+│   │   ├── multi_head_attention.py
+│   │   └── rnn.py
+│   ├── __init__.py
+│   ├── losses
+│   │   ├── binary_ce.py
+│   │   └── ce.py
+│   ├── metric
+│   │   └── metric.py
+│   ├── normalization
+│   │   ├── batchnorm.py
+│   │   └── layernorm.py
+│   ├── optimizer
+│   │   ├── Adam.py
+│   │   ├── SGD_momentum.py
+│   │   └── SGD.py
+│   ├── tokenizer
+│   │   ├── vocab.py
+│   │   └── word_tokenizer.py
+│   └── utils
+│       ├── dropout.py
+│       ├── embedding.py
+│       ├── flatten.py
+│       ├── pooling.py
+│       └── positional_encoding.py
+├── numpy_models
+│   ├── base_module.py
+│   ├── gan
+│   │   ├── __init__.py
+│   │   └── simple_gan.py
+│   ├── __init__.py
+│   ├── readme.md
+│   └── transformer
+│       ├── decoder_block.py
+│       ├── decoder.py
+│       ├── encoder_block.py
+│       ├── encoder.py
+│       ├── feedforward.py
+│       ├── __init__.py
+│       └── transformer.py
+└── README.md
 ```

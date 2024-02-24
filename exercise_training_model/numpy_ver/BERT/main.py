@@ -13,6 +13,9 @@ current_path = os.path.dirname(os.path.realpath(__file__))
 parent_path = os.path.dirname(current_path)
 grand_path = os.path.dirname(parent_path)
 sys.path.append(grand_path)
+grand_path = os.path.dirname(grand_path)
+sys.path.append(grand_path)
+print(grand_path)
 ###########################################################
 
 from numpy_functions import *
